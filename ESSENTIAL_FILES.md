@@ -27,8 +27,10 @@
   - Key files: package.json, src/, next.config.js, etc.
 
 ## Documentation
-- `README.md` - Project documentation
+- `README.md` - Project documentation with installation instructions
+- `DEPENDENCIES.md` - Requirements reference (serves as requirements.txt)
 - `replit.md` - Architecture and user preferences
+- `ESSENTIAL_FILES.md` - File structure guide
 - `.gitignore` - Git ignore patterns
 
 ## Infrastructure
@@ -42,7 +44,7 @@
 git add main.py config.json pyproject.toml uv.lock
 git add api/ models/ services/ templates/ utils/
 git add openresume_bridge.js openresume-source/
-git add README.md replit.md .gitignore
+git add README.md DEPENDENCIES.md replit.md ESSENTIAL_FILES.md .gitignore
 git add static/ .replit
 
 # Commit with meaningful message
