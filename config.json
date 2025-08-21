@@ -1,0 +1,34 @@
+{
+  "pdf_settings": {
+    "default_theme_color": "#1f2937",
+    "default_font_family": "OpenSans",
+    "default_font_size": "11",
+    "default_document_size": "Letter",
+    "max_file_size_mb": 10,
+    "output_directory": "output",
+    "temp_directory": "temp"
+  },
+  "api_settings": {
+    "max_request_size": "10MB",
+    "rate_limit_per_minute": 60,
+    "enable_cors": true,
+    "debug_mode": false
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": "app.log"
+  },
+  "fonts": {
+    "opensans_regular": "static/fonts/OpenSans-Regular.ttf",
+    "opensans_bold": "static/fonts/OpenSans-Bold.ttf"
+  },
+  "validation": {
+    "max_work_experiences": 10,
+    "max_educations": 5,
+    "max_projects": 10,
+    "max_skills_categories": 10,
+    "max_description_length": 200,
+    "required_fields": ["name", "email"]
+  }
+}
