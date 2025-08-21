@@ -13,6 +13,7 @@ import os
 
 from models.resume_models import ResumeData, ResumeResponse, ErrorResponse
 from services.pdf_generator import PDFGenerator
+from services.openresume_wrapper import OpenResumeWrapper
 from services.config_manager import ConfigManager
 from utils.validators import validate_resume_data, ResumeValidator
 
@@ -24,6 +25,7 @@ router = APIRouter()
 # Initialize services (will be properly injected in real implementation)
 config_manager = ConfigManager()
 pdf_generator = PDFGenerator(config_manager)
+openresume_wrapper = OpenResumeWrapper(config_manager)
 resume_validator = ResumeValidator(config_manager)
 
 @router.post("/generate-resume", response_model=ResumeResponse)
@@ -54,9 +56,13 @@ async def generate_resume(
         name_hash = hashlib.md5(resume_data.personalInfo.name.encode()).hexdigest()[:8]
         filename = f"resume_{resume_data.personalInfo.name.replace(' ', '_')}_{timestamp}_{name_hash}.pdf"
         
-        # Generate PDF
-        logger.info(f"Generating PDF for {resume_data.personalInfo.name}")
-        pdf_bytes = pdf_generator.generate_resume_pdf(resume_data)
+        # Generate PDF using OpenResume wrapper
+        logger.info(f"Generating PDF for {resume_data.personalInfo.name} using OpenResume")
+        try:
+            pdf_bytes = openresume_wrapper.generate_pdf_with_openresume(resume_data)
+        except Exception as openresume_error:
+            logger.warning(f"OpenResume wrapper failed: {openresume_error}, falling back to custom generator")
+            pdf_bytes = pdf_generator.generate_resume_pdf(resume_data)
         
         # Create response
         headers = {
@@ -209,6 +215,25 @@ async def update_config(updates: Dict[str, Any]):
                 "message": str(e)
             }
         )
+
+@router.get("/openresume-status")
+async def get_openresume_status():
+    """
+    Get status of OpenResume wrapper integration
+    """
+    try:
+        wrapper_info = openresume_wrapper.get_wrapper_info()
+        return {
+            "status": "success",
+            "wrapper_info": wrapper_info,
+            "integration_mode": "primary" if wrapper_info["openresume_available"] else "fallback"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error": str(e),
+            "integration_mode": "fallback"
+        }
 
 @router.get("/health")
 async def health_check():
