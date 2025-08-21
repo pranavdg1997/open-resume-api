@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Virtual environments
+venv/
+.venv/
+.pythonlibs/
+
+# Generated files
+output/
+temp/
+*.pdf
+generated-icon.png
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Replit specific
+.upm/
+.cache/
+.local/
+
+# Node modules in OpenResume source
+openresume-source/node_modules/
+openresume-source/.next/
+openresume-source/out/
+
+# Test files and comparisons
+test_*.py
+test_*.json
+compare_*.py
+attached_assets/
