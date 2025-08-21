@@ -11,6 +11,7 @@ import uvicorn
 import logging
 from typing import Dict, Any
 import os
+from datetime import datetime
 
 from models.resume_models import ResumeData, ResumeResponse
 from services.pdf_generator import PDFGenerator
@@ -102,7 +103,7 @@ async def http_exception_handler(request, exc):
         content={
             "error": exc.detail,
             "status_code": exc.status_code,
-            "timestamp": str(pd.Timestamp.now())
+            "timestamp": str(datetime.now())
         }
     )
 
@@ -120,7 +121,7 @@ async def general_exception_handler(request, exc):
     )
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", "8000"))
+    port = int(os.getenv("PORT", "5000"))
     host = os.getenv("HOST", "0.0.0.0")
     
     logger.info(f"Starting server on {host}:{port}")

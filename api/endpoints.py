@@ -217,7 +217,7 @@ async def health_check():
     """
     try:
         # Basic health checks
-        checks = {
+        checks: Dict[str, Any] = {
             "api": "healthy",
             "config": "loaded" if config_manager.config else "error",
             "pdf_generator": "ready",

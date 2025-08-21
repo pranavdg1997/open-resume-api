@@ -53,7 +53,7 @@ class PDFGenerator:
             # Create PDF document
             doc = SimpleDocTemplate(
                 buffer,
-                pagesize=self._get_page_size(resume_data.settings.documentSize),
+                pagesize=self._get_page_size(resume_data.settings.documentSize or "Letter"),
                 rightMargin=0.5*inch,
                 leftMargin=0.5*inch,
                 topMargin=0.5*inch,
@@ -67,31 +67,31 @@ class PDFGenerator:
             story.extend(self._build_header(resume_data.personalInfo, resume_data.settings))
             
             # Add sections based on settings
-            if resume_data.settings.formToShow.get("workExperiences", True) and resume_data.workExperiences:
+            if (resume_data.settings.formToShow or {}).get("workExperiences", True) and resume_data.workExperiences:
                 story.extend(self._build_work_experience_section(
                     resume_data.workExperiences, 
                     resume_data.settings
                 ))
             
-            if resume_data.settings.formToShow.get("educations", True) and resume_data.educations:
+            if (resume_data.settings.formToShow or {}).get("educations", True) and resume_data.educations:
                 story.extend(self._build_education_section(
                     resume_data.educations,
                     resume_data.settings
                 ))
             
-            if resume_data.settings.formToShow.get("projects", True) and resume_data.projects:
+            if (resume_data.settings.formToShow or {}).get("projects", True) and resume_data.projects:
                 story.extend(self._build_projects_section(
                     resume_data.projects,
                     resume_data.settings
                 ))
             
-            if resume_data.settings.formToShow.get("skills", True) and resume_data.skills:
+            if (resume_data.settings.formToShow or {}).get("skills", True) and resume_data.skills:
                 story.extend(self._build_skills_section(
                     resume_data.skills,
                     resume_data.settings
                 ))
             
-            if resume_data.settings.formToShow.get("custom", True) and resume_data.custom.descriptions:
+            if (resume_data.settings.formToShow or {}).get("custom", True) and resume_data.custom.descriptions:
                 story.extend(self._build_custom_section(
                     resume_data.custom.descriptions,
                     resume_data.settings
@@ -118,74 +118,86 @@ class PDFGenerator:
     
     def _get_styles(self, settings):
         """Get paragraph styles based on settings"""
+        # Check if we already have styles cached for this instance
+        if hasattr(self, '_cached_styles') and self._cached_styles:
+            return self._cached_styles
+        
         styles = getSampleStyleSheet()
         theme_color = HexColor(settings.themeColor)
         font_family = settings.fontFamily if settings.fontFamily in ['OpenSans'] else 'Helvetica'
         font_size = int(settings.fontSize) if settings.fontSize.isdigit() else 11
         
-        # Name style
-        styles.add(ParagraphStyle(
-            name='Name',
-            parent=styles['Heading1'],
-            fontName=f'{font_family}-Bold' if font_family == 'OpenSans' else 'Helvetica-Bold',
-            fontSize=20,
-            textColor=theme_color,
-            alignment=TA_CENTER,
-            spaceAfter=6
-        ))
+        # Add custom styles only if they don't exist
+        if 'Name' not in styles:
+            styles.add(ParagraphStyle(
+                name='Name',
+                parent=styles['Heading1'],
+                fontName=f'{font_family}-Bold' if font_family == 'OpenSans' else 'Helvetica-Bold',
+                fontSize=20,
+                textColor=theme_color,
+                alignment=TA_CENTER,
+                spaceAfter=6
+            ))
         
         # Contact style
-        styles.add(ParagraphStyle(
-            name='Contact',
-            parent=styles['Normal'],
-            fontName=font_family,
-            fontSize=font_size,
-            alignment=TA_CENTER,
-            spaceAfter=12
-        ))
+        if 'Contact' not in styles:
+            styles.add(ParagraphStyle(
+                name='Contact',
+                parent=styles['Normal'],
+                fontName=font_family,
+                fontSize=font_size,
+                alignment=TA_CENTER,
+                spaceAfter=12
+            ))
         
         # Section heading style
-        styles.add(ParagraphStyle(
-            name='SectionHeading',
-            parent=styles['Heading2'],
-            fontName=f'{font_family}-Bold' if font_family == 'OpenSans' else 'Helvetica-Bold',
-            fontSize=font_size + 2,
-            textColor=theme_color,
-            spaceBefore=12,
-            spaceAfter=6,
-            borderWidth=1,
-            borderColor=theme_color,
-            borderPadding=2
-        ))
+        if 'SectionHeading' not in styles:
+            styles.add(ParagraphStyle(
+                name='SectionHeading',
+                parent=styles['Heading2'],
+                fontName=f'{font_family}-Bold' if font_family == 'OpenSans' else 'Helvetica-Bold',
+                fontSize=font_size + 2,
+                textColor=theme_color,
+                spaceBefore=12,
+                spaceAfter=6,
+                borderWidth=1,
+                borderColor=theme_color,
+                borderPadding=2
+            ))
         
         # Job title style
-        styles.add(ParagraphStyle(
-            name='JobTitle',
-            parent=styles['Normal'],
-            fontName=f'{font_family}-Bold' if font_family == 'OpenSans' else 'Helvetica-Bold',
-            fontSize=font_size,
-            spaceBefore=6,
-            spaceAfter=2
-        ))
+        if 'JobTitle' not in styles:
+            styles.add(ParagraphStyle(
+                name='JobTitle',
+                parent=styles['Normal'],
+                fontName=f'{font_family}-Bold' if font_family == 'OpenSans' else 'Helvetica-Bold',
+                fontSize=font_size,
+                spaceBefore=6,
+                spaceAfter=2
+            ))
         
         # Company style
-        styles.add(ParagraphStyle(
-            name='Company',
-            parent=styles['Normal'],
-            fontName=font_family,
-            fontSize=font_size,
-            spaceAfter=2
-        ))
+        if 'Company' not in styles:
+            styles.add(ParagraphStyle(
+                name='Company',
+                parent=styles['Normal'],
+                fontName=font_family,
+                fontSize=font_size,
+                spaceAfter=2
+            ))
         
         # Body text style
-        styles.add(ParagraphStyle(
-            name='BodyText',
-            parent=styles['Normal'],
-            fontName=font_family,
-            fontSize=font_size,
-            spaceAfter=3
-        ))
+        if 'BodyText' not in styles:
+            styles.add(ParagraphStyle(
+                name='BodyText',
+                parent=styles['Normal'],
+                fontName=font_family,
+                fontSize=font_size,
+                spaceAfter=3
+            ))
         
+        # Cache styles for this generation
+        self._cached_styles = styles
         return styles
     
     def _build_header(self, personal_info: PersonalInfo, settings):
@@ -224,7 +236,7 @@ class PDFGenerator:
         styles = self._get_styles(settings)
         story = []
         
-        heading = settings.formToHeading.get("workExperiences", "WORK EXPERIENCE")
+        heading = (settings.formToHeading or {}).get("workExperiences", "WORK EXPERIENCE")
         story.append(Paragraph(heading, styles['SectionHeading']))
         
         for exp in work_experiences:
@@ -261,7 +273,7 @@ class PDFGenerator:
         styles = self._get_styles(settings)
         story = []
         
-        heading = settings.formToHeading.get("educations", "EDUCATION")
+        heading = (settings.formToHeading or {}).get("educations", "EDUCATION")
         story.append(Paragraph(heading, styles['SectionHeading']))
         
         for edu in educations:
@@ -301,7 +313,7 @@ class PDFGenerator:
         styles = self._get_styles(settings)
         story = []
         
-        heading = settings.formToHeading.get("projects", "PROJECTS")
+        heading = (settings.formToHeading or {}).get("projects", "PROJECTS")
         story.append(Paragraph(heading, styles['SectionHeading']))
         
         for project in projects:
@@ -336,7 +348,7 @@ class PDFGenerator:
         styles = self._get_styles(settings)
         story = []
         
-        heading = settings.formToHeading.get("skills", "SKILLS")
+        heading = (settings.formToHeading or {}).get("skills", "SKILLS")
         story.append(Paragraph(heading, styles['SectionHeading']))
         
         for skill_group in skills:
@@ -351,7 +363,7 @@ class PDFGenerator:
         styles = self._get_styles(settings)
         story = []
         
-        heading = settings.formToHeading.get("custom", "ADDITIONAL")
+        heading = (settings.formToHeading or {}).get("custom", "ADDITIONAL")
         story.append(Paragraph(heading, styles['SectionHeading']))
         
         for desc in descriptions:

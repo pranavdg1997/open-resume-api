@@ -50,7 +50,7 @@ class Project(BaseModel):
 class Skill(BaseModel):
     """Skill category"""
     category: str = Field(..., min_length=1, max_length=50, description="Skill category name")
-    skills: List[str] = Field(..., min_items=1, description="List of skills in this category")
+    skills: List[str] = Field(..., description="List of skills in this category")
 
     @validator('skills')
     def validate_skills(cls, v):
@@ -95,7 +95,7 @@ class ResumeData(BaseModel):
     projects: List[Project] = Field(default_factory=list)
     skills: List[Skill] = Field(default_factory=list)
     custom: Custom = Field(default_factory=Custom)
-    settings: ResumeSettings = Field(default_factory=ResumeSettings)
+    settings: ResumeSettings = Field(default_factory=lambda: ResumeSettings())
 
     class Config:
         schema_extra = {

@@ -1,0 +1,80 @@
+{
+  "personalInfo": {
+    "name": "John Doe",
+    "email": "john.doe@gmail.com",
+    "phone": "555-123-4567",
+    "url": "https://johndoe.dev",
+    "summary": "Experienced software engineer with expertise in full-stack development",
+    "location": "San Francisco, CA"
+  },
+  "workExperiences": [
+    {
+      "company": "Tech Corp",
+      "jobTitle": "Senior Software Engineer",
+      "date": "2022 - Present",
+      "descriptions": [
+        "Led development of microservices architecture serving 1M+ users",
+        "Mentored junior developers and improved team productivity by 30%",
+        "Implemented CI/CD pipelines reducing deployment time by 50%"
+      ]
+    }
+  ],
+  "educations": [
+    {
+      "school": "University of California",
+      "degree": "Bachelor of Science in Computer Science",
+      "date": "2020",
+      "gpa": "3.8",
+      "descriptions": [
+        "Graduated Magna Cum Laude",
+        "President of Computer Science Club"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Resume Builder API",
+      "date": "2025",
+      "descriptions": [
+        "Built FastAPI service for generating professional PDF resumes",
+        "Implemented ReportLab for custom PDF layouts"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "category": "Programming Languages",
+      "skills": ["Python", "JavaScript", "TypeScript", "Go"]
+    },
+    {
+      "category": "Frameworks",
+      "skills": ["FastAPI", "React", "Node.js", "Django"]
+    }
+  ],
+  "custom": {
+    "descriptions": [
+      "AWS Certified Solutions Architect",
+      "Speaker at tech conferences"
+    ]
+  },
+  "settings": {
+    "themeColor": "#2563eb",
+    "fontFamily": "OpenSans",
+    "fontSize": "11",
+    "documentSize": "Letter",
+    "formToShow": {
+      "workExperiences": true,
+      "educations": true,
+      "projects": true,
+      "skills": true,
+      "custom": true
+    },
+    "formToHeading": {
+      "workExperiences": "WORK EXPERIENCE",
+      "educations": "EDUCATION",
+      "projects": "PROJECTS",
+      "skills": "SKILLS",
+      "custom": "ADDITIONAL"
+    }
+  }
+}
