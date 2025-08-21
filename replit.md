@@ -1,8 +1,10 @@
 # Overview
 
-This is a FastAPI-based backend service that wraps OpenResume's resume builder functionality. The application provides a REST API for generating professional PDF resumes from structured data input. It accepts resume information through JSON and returns formatted PDF documents using ReportLab with OpenSans fonts and customizable templates.
+This is a FastAPI-based backend service that wraps OpenResume's resume builder functionality. The application provides a REST API for generating professional PDF resumes from structured data input. It accepts resume information through JSON and returns formatted PDF documents using ReportLab with Helvetica fonts and customizable templates.
 
 The system is designed to be ATS-friendly and follows OpenResume's design principles for clean, professional resume layouts. It includes comprehensive validation, configurable templates, and supports multiple resume sections including personal information, work experience, education, projects, and skills.
+
+**Status**: ✅ Fully functional - All core features implemented and tested (August 21, 2025)
 
 # User Preferences
 

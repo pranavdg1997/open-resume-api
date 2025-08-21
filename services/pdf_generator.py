@@ -124,7 +124,8 @@ class PDFGenerator:
         
         styles = getSampleStyleSheet()
         theme_color = HexColor(settings.themeColor)
-        font_family = settings.fontFamily if settings.fontFamily in ['OpenSans'] else 'Helvetica'
+        # Use Helvetica as fallback since OpenSans fonts are not available
+        font_family = 'Helvetica'
         font_size = int(settings.fontSize) if settings.fontSize.isdigit() else 11
         
         # Add custom styles only if they don't exist
@@ -132,7 +133,7 @@ class PDFGenerator:
             styles.add(ParagraphStyle(
                 name='Name',
                 parent=styles['Heading1'],
-                fontName=f'{font_family}-Bold' if font_family == 'OpenSans' else 'Helvetica-Bold',
+                fontName='Helvetica-Bold',
                 fontSize=20,
                 textColor=theme_color,
                 alignment=TA_CENTER,
@@ -144,7 +145,7 @@ class PDFGenerator:
             styles.add(ParagraphStyle(
                 name='Contact',
                 parent=styles['Normal'],
-                fontName=font_family,
+                fontName='Helvetica',
                 fontSize=font_size,
                 alignment=TA_CENTER,
                 spaceAfter=12
@@ -155,7 +156,7 @@ class PDFGenerator:
             styles.add(ParagraphStyle(
                 name='SectionHeading',
                 parent=styles['Heading2'],
-                fontName=f'{font_family}-Bold' if font_family == 'OpenSans' else 'Helvetica-Bold',
+                fontName='Helvetica-Bold',
                 fontSize=font_size + 2,
                 textColor=theme_color,
                 spaceBefore=12,
@@ -170,7 +171,7 @@ class PDFGenerator:
             styles.add(ParagraphStyle(
                 name='JobTitle',
                 parent=styles['Normal'],
-                fontName=f'{font_family}-Bold' if font_family == 'OpenSans' else 'Helvetica-Bold',
+                fontName='Helvetica-Bold',
                 fontSize=font_size,
                 spaceBefore=6,
                 spaceAfter=2
@@ -181,7 +182,7 @@ class PDFGenerator:
             styles.add(ParagraphStyle(
                 name='Company',
                 parent=styles['Normal'],
-                fontName=font_family,
+                fontName='Helvetica',
                 fontSize=font_size,
                 spaceAfter=2
             ))
@@ -191,7 +192,7 @@ class PDFGenerator:
             styles.add(ParagraphStyle(
                 name='BodyText',
                 parent=styles['Normal'],
-                fontName=font_family,
+                fontName='Helvetica',
                 fontSize=font_size,
                 spaceAfter=3
             ))
@@ -247,9 +248,9 @@ class PDFGenerator:
             ], colWidths=[4*inch, 2*inch])
             
             exp_table.setStyle(TableStyle([
-                ('FONTNAME', (0, 0), (0, 0), f"{settings.fontFamily}-Bold" if settings.fontFamily == 'OpenSans' else 'Helvetica-Bold'),
-                ('FONTNAME', (1, 0), (1, 0), settings.fontFamily if settings.fontFamily in ['OpenSans'] else 'Helvetica'),
-                ('FONTNAME', (0, 1), (0, 1), settings.fontFamily if settings.fontFamily in ['OpenSans'] else 'Helvetica'),
+                ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
+                ('FONTNAME', (1, 0), (1, 0), 'Helvetica'),
+                ('FONTNAME', (0, 1), (0, 1), 'Helvetica'),
                 ('FONTSIZE', (0, 0), (-1, -1), int(settings.fontSize) if settings.fontSize.isdigit() else 11),
                 ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),
@@ -287,9 +288,9 @@ class PDFGenerator:
             ], colWidths=[4*inch, 2*inch])
             
             edu_table.setStyle(TableStyle([
-                ('FONTNAME', (0, 0), (0, 0), f"{settings.fontFamily}-Bold" if settings.fontFamily == 'OpenSans' else 'Helvetica-Bold'),
-                ('FONTNAME', (1, 0), (1, 0), settings.fontFamily if settings.fontFamily in ['OpenSans'] else 'Helvetica'),
-                ('FONTNAME', (0, 1), (0, 1), settings.fontFamily if settings.fontFamily in ['OpenSans'] else 'Helvetica'),
+                ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
+                ('FONTNAME', (1, 0), (1, 0), 'Helvetica'),
+                ('FONTNAME', (0, 1), (0, 1), 'Helvetica'),
                 ('FONTSIZE', (0, 0), (-1, -1), int(settings.fontSize) if settings.fontSize.isdigit() else 11),
                 ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),
@@ -323,8 +324,8 @@ class PDFGenerator:
             ], colWidths=[4*inch, 2*inch])
             
             proj_table.setStyle(TableStyle([
-                ('FONTNAME', (0, 0), (0, 0), f"{settings.fontFamily}-Bold" if settings.fontFamily == 'OpenSans' else 'Helvetica-Bold'),
-                ('FONTNAME', (1, 0), (1, 0), settings.fontFamily if settings.fontFamily in ['OpenSans'] else 'Helvetica'),
+                ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
+                ('FONTNAME', (1, 0), (1, 0), 'Helvetica'),
                 ('FONTSIZE', (0, 0), (-1, -1), int(settings.fontSize) if settings.fontSize.isdigit() else 11),
                 ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),

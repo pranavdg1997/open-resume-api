@@ -1,7 +1,7 @@
 {
   "pdf_settings": {
     "default_theme_color": "#1f2937",
-    "default_font_family": "OpenSans",
+    "default_font_family": "Helvetica",
     "default_font_size": "11",
     "default_document_size": "Letter",
     "max_file_size_mb": 10,

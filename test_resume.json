@@ -59,7 +59,7 @@
   },
   "settings": {
     "themeColor": "#2563eb",
-    "fontFamily": "OpenSans",
+    "fontFamily": "Helvetica",
     "fontSize": "11",
     "documentSize": "Letter",
     "formToShow": {
