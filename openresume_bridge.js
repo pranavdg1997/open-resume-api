@@ -39,8 +39,12 @@ const createResumeData = (inputData) => {
       descriptions: proj.descriptions || []
     })),
     skills: {
-      featuredSkills: [], // OpenResume uses different skills structure
-      descriptions: []
+      featuredSkills: (inputData.skills || []).reduce((acc, skillGroup) => {
+        return acc.concat(skillGroup.skills || []);
+      }, []),
+      descriptions: (inputData.skills || []).map(skillGroup => 
+        `${skillGroup.category}: ${(skillGroup.skills || []).join(', ')}`
+      )
     },
     custom: {
       descriptions: []

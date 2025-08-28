@@ -1,0 +1,92 @@
+{
+  "personalInfo": {
+    "name": "PRANAV GUJARATHI",
+    "email": "pranavdg1997@gmail.com",
+    "phone": "(331) 248-7381",
+    "location": "Austin, TX",
+    "url": "linkedin.com/in/pranav-gujarathi/",
+    "summary": "Generative AI and ML Engineer with 7+ years of experience leading end-to-end AI/ML projects, specializing in Generative AI and NLP solutions. Proven success in developing Agentic AI platforms, automating exploratory data analysis, and deploying LLMs and other ML models at scale. Strong results, cost savings and efficiency improvements. Passionate about advancing AI capabilities in enterprise solutions as well helping organizations evolve into the Gen AI assisted rapid development"
+  },
+  "workExperiences": [
+    {
+      "company": "Cigna",
+      "jobTitle": "Senior AI Engineer",
+      "date": "September 2024 - Present",
+      "descriptions": [
+        "\u2022\u00a0Spearheading the development of a Generative AI-augmented Prior Authorization platform, focusing on Agentic AI systems, RAG pipelines, seamless platform integration, and robust ML-Ops pipelines.",
+        "\u2022\u00a0Orchestrating cross-functional teams to deliver scalable AI solutions for internal AI platforms, ensuring high performance, reliability, and compliance in medical care workflows."
+      ]
+    },
+    {
+      "company": "Walmart",
+      "jobTitle": "AI Engineer",
+      "date": "October 2023 - August 2024",
+      "descriptions": [
+        "\u2022\u00a0Developing Generative AI based automation solution that carries out exploratory Data analysis on complex data types simply based on voice/text commands, removing the learning curve for non-programmers to use analytical tools, in some cases removing the need to build dashboards. Saved 130,000 associate work hours per week.",
+        "\u2022\u00a0Delivered end-to-end automation solution for extracting item attributes and competitor using a RAG system (Retrieval Augmented Generation) to generate structured usable data \u2013 in contrast to a legacy system based on manual annotation \u2013 achieved 80% in cost savings and over 24 times improvement in turnaround time.",
+        "\u2022\u00a0Lead ML Engineering - containerization (Docker, configuring Kubernetes and deploying API endpoints in tandem with frontend solutions - enforcing high standards for quality, reliability, and security in deployed machine learning solutions."
+      ]
+    },
+    {
+      "company": "Walmart",
+      "jobTitle": "Data Scientist",
+      "date": "January 2022 - October 2023",
+      "descriptions": [
+        "\u2022\u00a0Deployed and managed large-scale anomaly detection engine with into production with real-time user feedback, providing upwards of 70% capture rate.",
+        "\u2022\u00a0Achieved > 80% explained variance and less than 5% global error by contributing to a novel causal-inference forecast model, helping make around $1.6 Billion worth of sales, more explainable and interpretable.",
+        "\u2022\u00a0Contributed to building a Rest API solution and optimized runtime on deployment on Azure cloud with best CI/CD practices.",
+        "\u2022\u00a0Conducted PoCs for Gen AI use-cases such as automated competitor prices mining tool, text-based interface for forecast observation (as an alternative to dashboard)"
+      ]
+    },
+    {
+      "company": "ZS Associates",
+      "jobTitle": "Data Science Associate",
+      "date": "June 2018 - December 2021",
+      "descriptions": [
+        "\u2022\u00a0Deployed a product with favorable client feedback and improved performance in the form of a cross platform application.",
+        "\u2022\u00a0As part of the project, utilized Python libraries, Deep Learning frameworks and transformer models to implement a Natural Language Inference pipeline, i.e., extracting domain-relevant inferences from textual data (news articles, publications, etc.).",
+        "\u2022\u00a0Deployed a novel ML based solution for marketing strategy planning with 60% more projected efficiency on target reach and market penetration ROI, using multivariate time series models and Linear Optimization."
+      ]
+    },
+    {
+      "company": "Indiana University - Bloomington",
+      "jobTitle": "Research Engineer",
+      "date": "January 2020 - May 2021",
+      "descriptions": [
+        "\u2022\u00a0Building a Mind Lab: Designed and implemented pipelines to successfully conduct experiments as part of NSF funded project under the guidance of Professor Justin Wood. The project involved working across topics in Computer Vision and Deep Reinforcement Learning.",
+        "\u2022\u00a0IUPUI Data Lab: Conducted research and experiments in Natural Language Processing models and architectures towards a",
+        "\u2022\u00a0successful end to end process from ideation to eventual publication under the guidance of Prof Sunandan Chakraborty.",
+        "\u2022\u00a0Kelley School of Business: Successfully deployed an MLOps pipeline starting from a PoC formulation to a GUI dashboard",
+        "\u2022\u00a0using Big Data libraries and cloud-based parallel computation."
+      ]
+    },
+    {
+      "company": "Indiana University - Bloomington",
+      "jobTitle": "Research Engineer",
+      "date": "January 2020 - May 2021",
+      "descriptions": [
+        "\u2022\u00a0Building a Mind Lab: Designed and implemented pipelines to successfully conduct experiments as part of NSF funded project under the guidance of Professor Justin Wood. The project involved working across topics in Computer Vision and Deep Reinforcement Learning.",
+        "\u2022\u00a0IUPUI Data Lab: Conducted research and experiments in Natural Language Processing models and architectures towards a",
+        "\u2022\u00a0successful end to end process from ideation to eventual publication under the guidance of Prof Sunandan Chakraborty.",
+        "\u2022\u00a0Kelley School of Business: Successfully deployed an MLOps pipeline starting from a PoC formulation to a GUI dashboard",
+        "\u2022\u00a0using Big Data libraries and cloud-based parallel computation."
+      ]
+    }
+  ],
+  "educations": [
+    {
+      "school": "Indiana University - Bloomington",
+      "degree": "Master's, Data Science",
+      "gpa": "",
+      "date": "August 2019 - May 2021"
+    }
+  ],
+  "projects": [],
+  "skills": [],
+  "settings": {
+    "themeColor": "#2563eb",
+    "fontFamily": "Helvetica",
+    "fontSize": "11",
+    "documentSize": "Letter"
+  }
+}
