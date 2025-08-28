@@ -127,13 +127,35 @@ class OpenResumeWrapper:
             }
         }
         
+        # Publications mapping (if exists)
+        publications = []
+        if hasattr(resume_data, 'publications') and resume_data.publications:
+            for pub in resume_data.publications:
+                publications.append({
+                    "name": pub.name,
+                    "date": pub.date,
+                    "descriptions": pub.descriptions
+                })
+        
+        # Certifications mapping (if exists)
+        certifications = []
+        if hasattr(resume_data, 'certifications') and resume_data.certifications:
+            for cert in resume_data.certifications:
+                certifications.append({
+                    "name": cert.name,
+                    "date": cert.date,
+                    "descriptions": cert.descriptions
+                })
+        
         # Complete OpenResume data structure
         openresume_data = {
-            "profile": profile,
+            "personalInfo": profile,  # Change to personalInfo to match generator
             "workExperiences": work_experiences,
             "educations": educations,
             "projects": projects,
-            "skills": skills,
+            "skills": [{"category": cat.split(": ")[0], "skills": cat.split(": ")[1].split(", ")} for cat in skills["descriptions"]] if skills["descriptions"] else [],
+            "publications": publications,
+            "certifications": certifications,
             "custom": custom,
             "settings": settings
         }
