@@ -131,7 +131,8 @@ const generateOpenResumePDF = async (resumeData) => {
       flexDirection: 'row',
       justifyContent: 'center',
       flexWrap: 'wrap',
-      marginBottom: 8
+      marginBottom: 12,
+      alignItems: 'center'
     },
     summary: {
       fontSize: 11,
@@ -195,46 +196,31 @@ const generateOpenResumePDF = async (resumeData) => {
         React.createElement(View, { style: styles.header },
           React.createElement(Text, { style: styles.name }, openResumeData.profile.name),
           
-          // First line: Email and Phone
+          // Single centered contact line with proper spacing
           React.createElement(View, { style: styles.contactLine },
             openResumeData.profile.email && React.createElement(Link, { 
               style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
               src: `mailto:${openResumeData.profile.email}`
             }, openResumeData.profile.email),
             
-            openResumeData.profile.phone && React.createElement(Text, null,
-              React.createElement(Text, { style: { ...styles.contact, marginLeft: 8, marginRight: 8 } }, ' • '),
-              React.createElement(Text, { style: styles.contact }, openResumeData.profile.phone)
-            )
-          ),
-          
-          // Second line: Location and URLs
-          React.createElement(View, { style: styles.contactLine },
-            openResumeData.profile.location && React.createElement(Text, { style: styles.contact }, openResumeData.profile.location),
+            openResumeData.profile.phone && React.createElement(Text, { style: styles.contact }, ` • ${openResumeData.profile.phone}`),
             
-            openResumeData.profile.url && React.createElement(Text, null,
-              React.createElement(Text, { style: { ...styles.contact, marginLeft: 8, marginRight: 8 } }, ' • '),
-              React.createElement(Link, {
-                style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
-                src: openResumeData.profile.url
-              }, openResumeData.profile.url)
-            ),
+            openResumeData.profile.location && React.createElement(Text, { style: styles.contact }, ` • ${openResumeData.profile.location}`),
             
-            openResumeData.profile.github && React.createElement(Text, null,
-              React.createElement(Text, { style: { ...styles.contact, marginLeft: 8, marginRight: 8 } }, ' • '),
-              React.createElement(Link, {
-                style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
-                src: openResumeData.profile.github
-              }, 'GitHub')
-            ),
+            openResumeData.profile.url && React.createElement(Link, {
+              style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
+              src: openResumeData.profile.url
+            }, ` • ${openResumeData.profile.url}`),
             
-            openResumeData.profile.linkedin && React.createElement(Text, null,
-              React.createElement(Text, { style: { ...styles.contact, marginLeft: 8, marginRight: 8 } }, ' • '),
-              React.createElement(Link, {
-                style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
-                src: openResumeData.profile.linkedin
-              }, 'LinkedIn')
-            )
+            openResumeData.profile.github && React.createElement(Link, {
+              style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
+              src: openResumeData.profile.github
+            }, ' • GitHub'),
+            
+            openResumeData.profile.linkedin && React.createElement(Link, {
+              style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
+              src: openResumeData.profile.linkedin
+            }, ' • LinkedIn')
           ),
           
           openResumeData.profile.summary && 
