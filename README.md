@@ -35,9 +35,13 @@ uv pip install fastapi uvicorn pydantic email-validator reportlab requests
 
 ### 3. Install Node.js Dependencies (for OpenResume)
 ```bash
-cd openresume-source
-npm install
-cd ..
+npm install @react-pdf/renderer react react-dom
+```
+
+### 4. Copy Configuration Template
+```bash
+cp config.example.json config.json
+# Edit config.json with your preferred settings
 ```
 
 ### 4. Verify Installation
@@ -59,7 +63,7 @@ The server runs on `http://localhost:5000`
 ```bash
 curl -X POST http://localhost:5000/api/v1/generate-resume \
   -H "Content-Type: application/json" \
-  -d @sample_resume.json \
+  -d @tests/test_sample_data.json \
   --output my_resume.pdf
 ```
 
@@ -124,9 +128,9 @@ The application uses `config.json` for settings:
 
 ## Testing
 
-Run the validation test suite:
+Run the test suite from the tests directory:
 ```bash
-python test_api_validation.py
+python tests/perfect_match_tester.py
 ```
 
 This verifies:
@@ -134,6 +138,8 @@ This verifies:
 - PDF generation functionality
 - Template endpoint availability
 - Generated file integrity
+
+Test data and sample resumes are available in the `tests/` folder.
 
 ## Architecture
 

@@ -10,12 +10,10 @@ pip-delete-this-directory.txt
 .tox
 .coverage
 .coverage.*
-.cache
 nosetests.xml
 coverage.xml
 *.cover
 *.log
-.git
 .mypy_cache
 .pytest_cache
 .hypothesis
@@ -47,18 +45,31 @@ generated-icon.png
 *.swo
 *~
 
-# Replit specific
+# Replit specific files (not needed for local users)
+.replit
 .upm/
 .cache/
 .local/
+replit.md
+uv.lock
+pyproject.toml
 
-# Node modules in OpenResume source
-openresume-source/node_modules/
-openresume-source/.next/
-openresume-source/out/
+# Node modules and dependencies
+node_modules/
+package-lock.json
 
-# Test files and comparisons
-test_*.py
-test_*.json
-compare_*.py
+# OpenResume source (development only)
+openresume-source/
+openresume_bridge.js
+real_openresume_integration.js
+
+# Test and development files
+tests/
 attached_assets/
+COMPREHENSIVE_RESUME_SUCCESS.md
+DEPENDENCIES.md  
+ESSENTIAL_FILES.md
+PERFECT_MATCH_RESULTS.md
+
+# Configuration files that may contain sensitive data
+config.json

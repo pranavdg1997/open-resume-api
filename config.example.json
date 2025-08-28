@@ -1,0 +1,24 @@
+{
+  "api": {
+    "host": "0.0.0.0",
+    "port": 5000,
+    "cors_origins": ["*"]
+  },
+  "pdf": {
+    "default_font_family": "OpenSans",
+    "default_font_size": 11,
+    "output_directory": "./output",
+    "temp_directory": "./temp"
+  },
+  "validation": {
+    "max_description_length": 500,
+    "max_experiences": 10,
+    "max_educations": 5,
+    "max_projects": 10,
+    "max_skills_per_category": 20
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  }
+}
