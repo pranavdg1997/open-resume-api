@@ -6,14 +6,17 @@ The system is designed to be ATS-friendly and follows OpenResume's design princi
 
 **Status**: ✅ Fully functional - All core features implemented and tested with real resume data (August 21, 2025)
 
-## Recent Testing Results (Professional PDF Achievement - August 28, 2025)
+## Recent Testing Results (Enhanced Resume Features - August 28, 2025)
 - ✅ **PROFESSIONAL QUALITY**: Fixed broken text-dump output to generate styled professional resumes
-- ✅ Implemented authentic OpenResume styling with @react-pdf/renderer
+- ✅ Implemented authentic OpenResume styling with @react-pdf/renderer  
 - ✅ Added letter-spaced section headers (E D U C A T I O N, W O R K  E X P E R I E N C E)
-- ✅ Proper bullet points with professional indentation and spacing
-- ✅ Right-aligned dates and clean typography matching OpenResume design
-- ✅ Complete sections: Personal info, Education, Work Experience, Projects, Skills
-- ✅ Real PDF generation using proper React PDF components
+- ✅ **STRUCTURED PROJECTS**: Projects now support headings, timelines, and bullet points like work experience
+- ✅ **BOLD SKILLS CATEGORIES**: Skill section names are bold in PDF output (Programming Languages, etc.)
+- ✅ **HYPERLINK SUPPORT**: Email, GitHub, portfolio links are blue and underlined as clickable links
+- ✅ **OPTIONAL SECTIONS**: Projects and Publications are skipped when empty (reduces from 15KB to 185 bytes)
+- ✅ **CENTERED HEADER**: Name is perfectly centered with proper spacing between contact elements
+- ✅ **TWO-LINE CONTACT LAYOUT**: Email/phone on line 1, location/URLs on line 2, all centered
+- ✅ Complete sections: Personal info, Education, Work Experience, Projects, Skills, Publications, Certifications
 - ✅ Production-ready professional resume output that looks authentic
 
 # User Preferences
