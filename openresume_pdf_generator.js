@@ -7,7 +7,8 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const React = require('react');
+const React = require('react');  
+const { Document, Page, Text, View, Link, StyleSheet, pdf } = require('@react-pdf/renderer');
 const { renderToBuffer } = require('@react-pdf/renderer');
 
 // Create a standalone PDF generator that mimics OpenResume's structure
@@ -92,8 +93,7 @@ const generateOpenResumePDF = async (resumeData) => {
     }
   };
 
-  // Create a simplified PDF using @react-pdf/renderer directly
-  const { Document, Page, Text, View, StyleSheet } = require('@react-pdf/renderer');
+  // Components already imported above
 
   const styles = StyleSheet.create({
     page: {
@@ -182,12 +182,54 @@ const generateOpenResumePDF = async (resumeData) => {
   const ResumeDocument = () => (
     React.createElement(Document, { title: `${openResumeData.profile.name} Resume` },
       React.createElement(Page, { size: 'LETTER', style: styles.page },
-        // Header with name and contact info
+        // Header with name and contact info (with hyperlinks)
         React.createElement(View, { style: styles.header },
           React.createElement(Text, { style: styles.name }, openResumeData.profile.name),
-          React.createElement(Text, { style: styles.contact }, 
-            [openResumeData.profile.email, openResumeData.profile.phone, openResumeData.profile.location]
-              .filter(Boolean).join(' • ')
+          React.createElement(View, { style: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' } },
+            // Email as hyperlink
+            openResumeData.profile.email && React.createElement(Link, { 
+              style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
+              src: `mailto:${openResumeData.profile.email}`
+            }, openResumeData.profile.email),
+            
+            // Phone number (no hyperlink)
+            openResumeData.profile.phone && React.createElement(Text, null,
+              React.createElement(Text, { style: styles.contact }, ' • '),
+              React.createElement(Text, { style: styles.contact }, openResumeData.profile.phone)
+            ),
+            
+            // Location (no hyperlink)
+            openResumeData.profile.location && React.createElement(Text, null,
+              React.createElement(Text, { style: styles.contact }, ' • '), 
+              React.createElement(Text, { style: styles.contact }, openResumeData.profile.location)
+            ),
+            
+            // Portfolio URL as hyperlink
+            openResumeData.profile.url && React.createElement(Text, null,
+              React.createElement(Text, { style: styles.contact }, ' • '),
+              React.createElement(Link, {
+                style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
+                src: openResumeData.profile.url
+              }, openResumeData.profile.url)
+            ),
+            
+            // GitHub URL as hyperlink  
+            openResumeData.profile.github && React.createElement(Text, null,
+              React.createElement(Text, { style: styles.contact }, ' • '),
+              React.createElement(Link, {
+                style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
+                src: openResumeData.profile.github
+              }, openResumeData.profile.github)
+            ),
+            
+            // LinkedIn URL as hyperlink
+            openResumeData.profile.linkedin && React.createElement(Text, null,
+              React.createElement(Text, { style: styles.contact }, ' • '),
+              React.createElement(Link, {
+                style: { ...styles.contact, color: '#2563eb', textDecoration: 'underline' },
+                src: openResumeData.profile.linkedin
+              }, openResumeData.profile.linkedin)
+            )
           ),
           openResumeData.profile.summary && 
             React.createElement(Text, { style: styles.summary }, openResumeData.profile.summary)
@@ -229,13 +271,17 @@ const generateOpenResumePDF = async (resumeData) => {
             )
           ),
 
-        // Projects Section
-        openResumeData.projects.length > 0 &&
+        // Projects Section (with structured format like work experience)
+        openResumeData.projects && openResumeData.projects.length > 0 &&
           React.createElement(View, { style: styles.section },
             React.createElement(Text, { style: styles.sectionTitle }, 'PROJECTS'),
             ...openResumeData.projects.map((proj, index) =>
               React.createElement(View, { key: index, style: styles.experienceItem },
-                React.createElement(Text, { style: styles.jobTitle }, proj.project),
+                React.createElement(View, { style: styles.experienceHeader },
+                  React.createElement(Text, { style: styles.company }, 
+                    proj.company ? `${proj.name} - ${proj.company}` : proj.name),
+                  React.createElement(Text, { style: styles.date }, proj.date)
+                ),
                 ...proj.descriptions.map((desc, descIndex) =>
                   React.createElement(Text, { key: descIndex, style: styles.bullet }, `• ${desc}`)
                 )
@@ -243,12 +289,32 @@ const generateOpenResumePDF = async (resumeData) => {
             )
           ),
 
-        // Skills Section
-        openResumeData.skills.descriptions.length > 0 &&
+        // Skills Section (with bold categories)
+        ((openResumeData.skills && openResumeData.skills.length > 0) || 
+         (openResumeData.skills && openResumeData.skills.descriptions && openResumeData.skills.descriptions.length > 0)) &&
           React.createElement(View, { style: styles.section },
             React.createElement(Text, { style: styles.sectionTitle }, 'SKILLS'),
-            ...openResumeData.skills.descriptions.map((skill, index) =>
-              React.createElement(Text, { key: index, style: styles.skillsText }, skill)
+            // Handle structured skills format
+            ...(openResumeData.skills && Array.isArray(openResumeData.skills) ? 
+              openResumeData.skills.map((skillGroup, index) =>
+                React.createElement(Text, { key: index, style: styles.skillsText },
+                  React.createElement(Text, { style: { fontWeight: 'bold' } }, skillGroup.category + ': '),
+                  skillGroup.skills.join(', ')
+                )
+              ) :
+              // Handle legacy descriptions format with bold categories  
+              (openResumeData.skills.descriptions || []).map((skill, index) => {
+                const colonIndex = skill.indexOf(': ');
+                if (colonIndex > 0) {
+                  const category = skill.substring(0, colonIndex + 1);
+                  const skillList = skill.substring(colonIndex + 2);
+                  return React.createElement(Text, { key: index, style: styles.skillsText },
+                    React.createElement(Text, { style: { fontWeight: 'bold' } }, category),
+                    ' ' + skillList
+                  );
+                }
+                return React.createElement(Text, { key: index, style: styles.skillsText }, skill);
+              })
             )
           ),
 

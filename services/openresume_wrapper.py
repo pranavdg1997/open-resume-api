@@ -41,12 +41,14 @@ class OpenResumeWrapper:
     def transform_to_openresume_format(self, resume_data: ResumeData) -> Dict[str, Any]:
         """Transform our resume data format to OpenResume format"""
         
-        # Personal info mapping
+        # Personal info mapping (with hyperlink support)
         profile = {
             "name": resume_data.personalInfo.name,
             "email": resume_data.personalInfo.email,
             "phone": resume_data.personalInfo.phone or "",
             "url": resume_data.personalInfo.url or "",
+            "github": getattr(resume_data.personalInfo, 'github', None) or "",
+            "linkedin": getattr(resume_data.personalInfo, 'linkedin', None) or "",
             "summary": resume_data.personalInfo.summary or "",
             "location": resume_data.personalInfo.location or ""
         }
@@ -72,11 +74,12 @@ class OpenResumeWrapper:
                 "descriptions": edu.descriptions
             })
         
-        # Projects mapping
+        # Projects mapping (structured format)
         projects = []
         for proj in resume_data.projects:
             projects.append({
-                "project": proj.name,
+                "name": proj.name,
+                "company": getattr(proj, 'company', None),
                 "date": proj.date,
                 "descriptions": proj.descriptions
             })
@@ -91,6 +94,26 @@ class OpenResumeWrapper:
             for skill_group in resume_data.skills:
                 skill_desc = f"{skill_group.category}: {', '.join(skill_group.skills)}"
                 skills["descriptions"].append(skill_desc)
+        
+        # Publications mapping (if exists)
+        publications = []
+        if hasattr(resume_data, 'publications') and resume_data.publications:
+            for pub in resume_data.publications:
+                publications.append({
+                    "name": pub.name,
+                    "date": pub.date,
+                    "descriptions": pub.descriptions
+                })
+        
+        # Certifications mapping (if exists)
+        certifications = []
+        if hasattr(resume_data, 'certifications') and resume_data.certifications:
+            for cert in resume_data.certifications:
+                certifications.append({
+                    "name": cert.name,
+                    "date": cert.date,
+                    "descriptions": cert.descriptions
+                })
         
         # Custom section
         custom = {
@@ -113,8 +136,10 @@ class OpenResumeWrapper:
             "formToShow": {
                 "workExperiences": bool(work_experiences),
                 "educations": bool(educations),
-                "projects": bool(projects),
+                "projects": bool(projects),  # Optional: skip if empty
                 "skills": bool(resume_data.skills),
+                "publications": bool(publications),  # Optional: skip if empty
+                "certifications": bool(certifications),  # Optional: skip if empty
                 "custom": bool(custom["descriptions"])
             },
             "formsOrder": ["workExperiences", "educations", "projects", "skills", "custom"],
@@ -126,26 +151,6 @@ class OpenResumeWrapper:
                 "custom": True
             }
         }
-        
-        # Publications mapping (if exists)
-        publications = []
-        if hasattr(resume_data, 'publications') and resume_data.publications:
-            for pub in resume_data.publications:
-                publications.append({
-                    "name": pub.name,
-                    "date": pub.date,
-                    "descriptions": pub.descriptions
-                })
-        
-        # Certifications mapping (if exists)
-        certifications = []
-        if hasattr(resume_data, 'certifications') and resume_data.certifications:
-            for cert in resume_data.certifications:
-                certifications.append({
-                    "name": cert.name,
-                    "date": cert.date,
-                    "descriptions": cert.descriptions
-                })
         
         # Complete OpenResume data structure
         openresume_data = {

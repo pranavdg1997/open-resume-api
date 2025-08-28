@@ -3,9 +3,11 @@
     "name": "PRANAV GUJARATHI",
     "email": "pranavdg1997@gmail.com",
     "phone": "(331) 248-7381",
-    "location": "Austin, TX",
-    "url": "linkedin.com/in/pranav-gujarathi/",
-    "summary": "Generative AI and ML Engineer with 7+ years experience in AI/ML projects, specializing in Generative AI and NLP. Proven success in Agentic AI platforms, data analysis automation, and LLM deployment. Expert in deep learning, RAG systems, ML-Ops with measurable results and cost savings. Passionate about advancing AI capabilities in enterprise solutions and Gen AI assisted development."
+    "url": "https://pranav-portfolio.dev",
+    "github": "https://github.com/pranavdg1997",
+    "linkedin": "https://linkedin.com/in/pranavgujarathi",
+    "summary": "Generative AI and ML Engineer with 7+ years experience in AI/ML projects, specializing in Generative AI and NLP. Proven success in Agentic AI platforms, data analysis automation, and LLM deployment. Expert in deep learning, RAG systems, ML-Ops with measurable results and cost savings. Passionate about advancing AI capabilities in enterprise solutions and Gen AI assisted development.",
+    "location": "Austin, TX"
   },
   "workExperiences": [
     {
@@ -64,7 +66,6 @@
       "school": "Indiana University - Bloomington",
       "degree": "Master's, Data Science",
       "date": "August 2019 - May 2021",
-      "gpa": "3.8/4.0",
       "descriptions": [
         "Coursework: Machine Learning, Deep Learning, Natural Language Processing, Computer Vision, Big Data Analytics",
         "Research Assistant in Computer Vision and Deep Reinforcement Learning under NSF funded project"
@@ -74,7 +75,6 @@
       "school": "Pune Institute of Computer Technology",
       "degree": "Bachelor's, Computer Engineering",
       "date": "August 2014 - May 2018",
-      "gpa": "8.5/10.0",
       "descriptions": [
         "Coursework: Data Structures, Algorithms, Machine Learning, Database Systems, Software Engineering",
         "Final Project: Developed a recommendation system using collaborative filtering techniques"
@@ -84,6 +84,7 @@
   "projects": [
     {
       "name": "Generative AI Prior Authorization Platform",
+      "company": "Cigna Healthcare",
       "date": "2024",
       "descriptions": [
         "Developed Generative AI-augmented Prior Authorization platform with Agentic AI systems and RAG pipelines",
@@ -92,7 +93,8 @@
       ]
     },
     {
-      "name": "Voice-Activated Data Analysis Tool", 
+      "name": "Voice-Activated Data Analysis Tool",
+      "company": "Walmart Labs",
       "date": "2023",
       "descriptions": [
         "Built automation solution for exploratory data analysis using voice/text commands, saving 130,000+ work hours weekly",
@@ -102,6 +104,7 @@
     },
     {
       "name": "RAG-Based Item Attribute Extraction System",
+      "company": "Walmart",
       "date": "2023", 
       "descriptions": [
         "Delivered end-to-end RAG system for extracting item attributes, achieving 80% cost savings and 24x faster turnaround",
@@ -111,6 +114,7 @@
     },
     {
       "name": "Real-Time Anomaly Detection Engine",
+      "company": "Walmart",
       "date": "2022",
       "descriptions": [
         "Deployed large-scale real-time anomaly detection with 70% capture rate and user feedback integration",
@@ -120,6 +124,7 @@
     },
     {
       "name": "Cross-Platform NLP Application",
+      "company": "ZS Associates",
       "date": "2020",
       "descriptions": [
         "Built Natural Language Inference pipeline using transformer models for domain-relevant text extraction",
@@ -129,6 +134,7 @@
     },
     {
       "name": "Marketing Strategy ML Optimization",
+      "company": "ZS Associates",
       "date": "2019",
       "descriptions": [
         "Developed ML-based marketing planning solution with 60% projected efficiency improvement",
@@ -202,7 +208,7 @@
     },
     {
       "name": "Google Cloud Professional ML Engineer",
-      "date": "2022", 
+      "date": "2022",
       "descriptions": [
         "Professional certification in designing and building ML solutions on Google Cloud Platform"
       ]
@@ -214,5 +220,11 @@
         "Certification in implementing AI solutions using Azure Cognitive Services and ML services"
       ]
     }
-  ]
+  ],
+  "settings": {
+    "themeColor": "#1f2937",
+    "fontFamily": "OpenSans", 
+    "fontSize": "11",
+    "documentSize": "Letter"
+  }
 }

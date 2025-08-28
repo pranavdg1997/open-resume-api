@@ -13,6 +13,8 @@ class PersonalInfo(BaseModel):
     email: EmailStr = Field(..., description="Email address")
     phone: Optional[str] = Field(None, max_length=20, description="Phone number")
     url: Optional[str] = Field(None, description="Personal website or portfolio URL")
+    github: Optional[str] = Field(None, description="GitHub profile URL") 
+    linkedin: Optional[str] = Field(None, description="LinkedIn profile URL")
     summary: Optional[str] = Field(None, max_length=500, description="Professional summary")
     location: Optional[str] = Field(None, max_length=100, description="Location (city, state)")
 
@@ -42,10 +44,15 @@ class Education(BaseModel):
     descriptions: List[str] = Field(default_factory=list, description="Additional details")
 
 class Project(BaseModel):
-    """Project entry"""
+    """Project entry with structured format similar to work experience"""
     name: str = Field(..., min_length=1, max_length=100, description="Project name")
+    company: Optional[str] = Field(None, max_length=100, description="Company or organization (optional)")
     date: str = Field(..., description="Project date or date range")
     descriptions: List[str] = Field(default_factory=list, description="Project details and achievements")
+    
+    @validator('descriptions')
+    def validate_descriptions(cls, v):
+        return [desc.strip() for desc in v if desc.strip()]
 
 class Skill(BaseModel):
     """Skill category"""
@@ -55,6 +62,26 @@ class Skill(BaseModel):
     @validator('skills')
     def validate_skills(cls, v):
         return [skill.strip() for skill in v if skill.strip()]
+
+class Publication(BaseModel):
+    """Publication entry"""
+    name: str = Field(..., min_length=1, max_length=200, description="Publication title")
+    date: str = Field(..., description="Publication date") 
+    descriptions: List[str] = Field(default_factory=list, description="Publication details")
+    
+    @validator('descriptions')
+    def validate_descriptions(cls, v):
+        return [desc.strip() for desc in v if desc.strip()]
+
+class Certification(BaseModel):
+    """Certification entry"""
+    name: str = Field(..., min_length=1, max_length=100, description="Certification name")
+    date: str = Field(..., description="Certification date")
+    descriptions: List[str] = Field(default_factory=list, description="Certification details")
+    
+    @validator('descriptions')
+    def validate_descriptions(cls, v):
+        return [desc.strip() for desc in v if desc.strip()]
 
 class Custom(BaseModel):
     """Custom section"""
@@ -94,6 +121,8 @@ class ResumeData(BaseModel):
     educations: List[Education] = Field(default_factory=list)
     projects: List[Project] = Field(default_factory=list)
     skills: List[Skill] = Field(default_factory=list)
+    publications: List[Publication] = Field(default_factory=list)
+    certifications: List[Certification] = Field(default_factory=list)
     custom: Custom = Field(default_factory=Custom)
     settings: ResumeSettings = Field(default_factory=lambda: ResumeSettings())
 
