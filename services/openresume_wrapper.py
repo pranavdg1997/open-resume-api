@@ -20,7 +20,7 @@ class OpenResumeWrapper:
     def __init__(self, config_manager):
         self.config_manager = config_manager
         self.openresume_path = "openresume-source"
-        self.bridge_script = "real_openresume_integration.js"
+        self.bridge_script = "openresume_pdf_generator.js"
         
         # Verify OpenResume installation
         self._verify_installation()
