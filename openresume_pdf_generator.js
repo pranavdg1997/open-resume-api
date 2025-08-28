@@ -50,7 +50,17 @@ const generateOpenResumePDF = async (resumeData) => {
     },
     custom: {
       descriptions: []
-    }
+    },
+    publications: (resumeData.publications || []).map(pub => ({
+      name: pub.name || '',
+      date: pub.date || '',
+      descriptions: pub.descriptions || []
+    })),
+    certifications: (resumeData.certifications || []).map(cert => ({
+      name: cert.name || '',
+      date: cert.date || '',
+      descriptions: cert.descriptions || []
+    }))
   };
 
   const settings = {
@@ -239,6 +249,40 @@ const generateOpenResumePDF = async (resumeData) => {
             React.createElement(Text, { style: styles.sectionTitle }, 'SKILLS'),
             ...openResumeData.skills.descriptions.map((skill, index) =>
               React.createElement(Text, { key: index, style: styles.skillsText }, skill)
+            )
+          ),
+
+        // Publications Section
+        openResumeData.publications && openResumeData.publications.length > 0 &&
+          React.createElement(View, { style: styles.section },
+            React.createElement(Text, { style: styles.sectionTitle }, 'PUBLICATIONS'),
+            ...openResumeData.publications.map((pub, index) =>
+              React.createElement(View, { key: index, style: styles.experienceItem },
+                React.createElement(View, { style: styles.experienceHeader },
+                  React.createElement(Text, { style: styles.jobTitle }, pub.name),
+                  React.createElement(Text, { style: styles.date }, pub.date)
+                ),
+                ...pub.descriptions.map((desc, descIndex) =>
+                  React.createElement(Text, { key: descIndex, style: styles.bullet }, `• ${desc}`)
+                )
+              )
+            )
+          ),
+
+        // Certifications Section
+        openResumeData.certifications && openResumeData.certifications.length > 0 &&
+          React.createElement(View, { style: styles.section },
+            React.createElement(Text, { style: styles.sectionTitle }, 'CERTIFICATIONS'),
+            ...openResumeData.certifications.map((cert, index) =>
+              React.createElement(View, { key: index, style: styles.experienceItem },
+                React.createElement(View, { style: styles.experienceHeader },
+                  React.createElement(Text, { style: styles.jobTitle }, cert.name),
+                  React.createElement(Text, { style: styles.date }, cert.date)
+                ),
+                ...cert.descriptions.map((desc, descIndex) =>
+                  React.createElement(Text, { key: descIndex, style: styles.bullet }, `• ${desc}`)
+                )
+              )
             )
           )
       )

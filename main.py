@@ -96,11 +96,15 @@ async def root():
 
 @app.get("/validated_resume.json")
 async def get_sample_data():
-    """Serve sample resume data for frontend"""
+    """Serve comprehensive sample resume data for frontend"""
     try:
-        return FileResponse("validated_resume.json")
+        return FileResponse("comprehensive_sample_resume.json")
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Sample data not found")
+        # Fallback to original if comprehensive doesn't exist
+        try:
+            return FileResponse("validated_resume.json")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Sample data not found")
 
 @app.get("/health")
 async def health_check():

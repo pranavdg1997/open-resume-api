@@ -345,6 +345,8 @@
             const education = currentResumeData.educations || [];
             const projects = currentResumeData.projects || [];
             const skills = currentResumeData.skills || [];
+            const publications = currentResumeData.publications || [];
+            const certifications = currentResumeData.certifications || [];
             
             previewContent.innerHTML = `
                 <div style="background: white; padding: 20px; border-radius: 6px; border: 1px solid #d1d5db;">
@@ -399,11 +401,48 @@
                     ` : ''}
                     
                     ${skills.length > 0 ? `
-                    <div>
+                    <div style="margin-bottom: 20px;">
                         <h3 style="color: #1f2937; margin-bottom: 10px; font-size: 1.1rem;">SKILLS</h3>
-                        ${skills.slice(0, 3).map(skillGroup => `
+                        ${skills.slice(0, 4).map(skillGroup => `
                             <p style="margin-bottom: 5px;"><strong>${skillGroup.category}:</strong> ${(skillGroup.skills || []).join(', ')}</p>
                         `).join('')}
+                        ${skills.length > 4 ? `<p style="color: #6b7280; font-style: italic;">... and ${skills.length - 4} more skill categories</p>` : ''}
+                    </div>
+                    ` : ''}
+                    
+                    ${publications.length > 0 ? `
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #1f2937; margin-bottom: 10px; font-size: 1.1rem;">PUBLICATIONS</h3>
+                        ${publications.slice(0, 2).map(pub => `
+                            <div style="margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong>${pub.name}</strong>
+                                    <span style="color: #6b7280;">${pub.date}</span>
+                                </div>
+                                ${pub.descriptions && pub.descriptions.length > 0 ? 
+                                    pub.descriptions.slice(0, 1).map(desc => `<p style="margin: 5px 0; margin-left: 15px; font-size: 10px;">• ${desc}</p>`).join('') : ''
+                                }
+                            </div>
+                        `).join('')}
+                        ${publications.length > 2 ? `<p style="color: #6b7280; font-style: italic;">... and ${publications.length - 2} more publications</p>` : ''}
+                    </div>
+                    ` : ''}
+                    
+                    ${certifications.length > 0 ? `
+                    <div>
+                        <h3 style="color: #1f2937; margin-bottom: 10px; font-size: 1.1rem;">CERTIFICATIONS</h3>
+                        ${certifications.slice(0, 2).map(cert => `
+                            <div style="margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong>${cert.name}</strong>
+                                    <span style="color: #6b7280;">${cert.date}</span>
+                                </div>
+                                ${cert.descriptions && cert.descriptions.length > 0 ? 
+                                    cert.descriptions.slice(0, 1).map(desc => `<p style="margin: 5px 0; margin-left: 15px; font-size: 10px;">• ${desc}</p>`).join('') : ''
+                                }
+                            </div>
+                        `).join('')}
+                        ${certifications.length > 2 ? `<p style="color: #6b7280; font-style: italic;">... and ${certifications.length - 2} more certifications</p>` : ''}
                     </div>
                     ` : ''}
                 </div>
