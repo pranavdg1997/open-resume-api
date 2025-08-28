@@ -5,7 +5,7 @@ A FastAPI wrapper for OpenResume's resume builder functionality
 
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 import logging
@@ -70,9 +70,18 @@ async def shutdown_event():
 # Include API routes
 app.include_router(router, prefix="/api/v1")
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
+async def frontend():
+    """Serve the frontend interface"""
+    try:
+        with open("static/index.html", "r") as f:
+            return HTMLResponse(content=f.read())
+    except FileNotFoundError:
+        return HTMLResponse("<h1>Frontend not found</h1><p>Please check static/index.html</p>")
+
+@app.get("/api")
 async def root():
-    """Root endpoint with API information"""
+    """API information endpoint"""
     return {
         "message": "OpenResume API",
         "version": "1.0.0",
@@ -84,6 +93,14 @@ async def root():
             "config": "/api/v1/config"
         }
     }
+
+@app.get("/validated_resume.json")
+async def get_sample_data():
+    """Serve sample resume data for frontend"""
+    try:
+        return FileResponse("validated_resume.json")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Sample data not found")
 
 @app.get("/health")
 async def health_check():
