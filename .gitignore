@@ -54,6 +54,18 @@ replit.md
 uv.lock
 pyproject.toml
 
+# Development documentation files
+COMPREHENSIVE_RESUME_SUCCESS.md
+DEPENDENCIES.md  
+ESSENTIAL_FILES.md
+PERFECT_MATCH_RESULTS.md
+
+# Generated development files
+generated-icon.png
+generated_from_excel.pdf
+git_ready_test.pdf
+perfect_match_resume.json
+
 # Node modules and dependencies
 node_modules/
 package-lock.json
