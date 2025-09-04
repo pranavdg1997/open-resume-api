@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  openresume-api:
+    build: .
+    container_name: openresume-api-wrapper
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PYTHONPATH=/app
+      - HOST=0.0.0.0
+      - PORT=5000
+    volumes:
+      # Mount config for easy configuration changes
+      - ./config.json:/app/config.json:ro
+      # Mount output directory for generated PDFs (optional)
+      - ./output:/app/output
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - openresume-network
+
+networks:
+  openresume-network:
+    driver: bridge
+
+# Optional: Add volume for persistent storage
+volumes:
+  openresume-output:
+    driver: local

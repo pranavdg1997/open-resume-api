@@ -85,3 +85,6 @@ PERFECT_MATCH_RESULTS.md
 
 # Configuration files that may contain sensitive data
 config.json
+
+# Docker generated files
+.dockerignore

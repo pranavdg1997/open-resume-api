@@ -24,7 +24,54 @@ All PDF generation, resume templates, and core functionality are powered by the 
 
 ## Installation
 
-### Prerequisites
+You can install this application either using Docker (recommended) or manually.
+
+### Option 1: Docker Installation (Recommended)
+
+#### Prerequisites
+- **Docker** and **Docker Compose** installed on your system
+
+#### Quick Start with Docker
+```bash
+# 1. Clone the repository
+git clone [your-repo-url]
+cd openresume-api-wrapper
+
+# 2. Copy configuration template
+cp config.example.json config.json
+# Edit config.json with your preferred settings
+
+# 3. Build and start with Docker Compose
+docker-compose up --build
+
+# 4. Access the API
+# The service will be available at http://localhost:5000
+```
+
+#### Docker Commands
+```bash
+# Build the image
+docker build -t openresume-api .
+
+# Run container manually
+docker run -d \
+  --name openresume-api \
+  -p 5000:5000 \
+  -v $(pwd)/config.json:/app/config.json:ro \
+  -v $(pwd)/output:/app/output \
+  openresume-api
+
+# View logs
+docker logs openresume-api
+
+# Stop and remove
+docker stop openresume-api
+docker rm openresume-api
+```
+
+### Option 2: Manual Installation
+
+#### Prerequisites
 - **Python 3.11+**
 - **Node.js 18+** (required for OpenResume integration)
 
@@ -177,17 +224,74 @@ Automatically managed via `openresume-source/package.json`:
 - `react` - React framework
 - `next` - Next.js framework
 
+## Docker Features
+
+### Multi-Stage Build
+The Dockerfile uses a multi-stage build approach:
+- **Stage 1**: Node.js Alpine image for installing OpenResume dependencies
+- **Stage 2**: Python slim image with Node.js runtime for the application
+
+### Container Configuration
+```yaml
+# docker-compose.yml features:
+- Port mapping: 5000:5000
+- Volume mounts for configuration and output
+- Health checks with automatic restart
+- Production environment variables
+- Isolated network for security
+```
+
+### Environment Variables
+```bash
+# Available environment variables for Docker
+NODE_ENV=production          # Node.js environment
+PYTHONPATH=/app             # Python path
+HOST=0.0.0.0               # Bind to all interfaces
+PORT=5000                  # Application port
+```
+
+### Docker Volumes
+```bash
+# Persistent storage options
+./config.json:/app/config.json:ro    # Configuration (read-only)
+./output:/app/output                 # Generated PDFs output
+```
+
+### Docker Health Checks
+The container includes automatic health monitoring:
+- **Endpoint**: `GET /health`
+- **Interval**: Every 30 seconds
+- **Timeout**: 10 seconds
+- **Retries**: 3 attempts
+- **Start Period**: 40 seconds
+
 ## Production Deployment
 
-### Environment Setup
+### Docker Production Deployment
+```bash
+# Production deployment with Docker
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+# Or build and run manually
+docker build -t openresume-api:latest .
+docker run -d \
+  --name openresume-api-prod \
+  -p 80:5000 \
+  -v /path/to/config.json:/app/config.json:ro \
+  -v /path/to/output:/app/output \
+  --restart unless-stopped \
+  openresume-api:latest
+```
+
+### Traditional Installation
 ```bash
 # Set production environment
 export NODE_ENV=production
 export PYTHONPATH=/path/to/your/app
 
 # Install dependencies
-pip install -r DEPENDENCIES.md  # Use dependency list
-cd openresume-source && npm ci --production
+pip install -r requirements.txt
+npm install @react-pdf/renderer react react-dom
 ```
 
 ### Configuration
@@ -196,6 +300,34 @@ cd openresume-source && npm ci --production
 - Falls back to ReportLab when OpenResume unavailable
 - Includes comprehensive error handling and logging
 - Supports configurable rate limiting and CORS
+
+## Docker Troubleshooting
+
+### Common Issues
+```bash
+# Port already in use
+docker-compose down
+sudo lsof -i :5000
+kill -9 <PID>
+
+# Permission issues with volumes
+sudo chown -R $USER:$USER ./output
+chmod 755 ./output
+
+# View container logs
+docker logs openresume-api-wrapper
+docker-compose logs -f
+
+# Rebuild without cache
+docker-compose build --no-cache
+docker-compose up --force-recreate
+```
+
+### Resource Requirements
+- **RAM**: Minimum 512MB, Recommended 1GB+
+- **CPU**: 1 core minimum, 2+ cores recommended
+- **Storage**: ~500MB for image, additional space for output PDFs
+- **Network**: Port 5000 exposed for API access
 
 ## Integration Status
 
