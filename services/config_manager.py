@@ -7,13 +7,14 @@ import os
 import logging
 from typing import Dict, Any
 from pathlib import Path
+import constants
 
 logger = logging.getLogger(__name__)
 
 class ConfigManager:
     """Manages application configuration"""
     
-    def __init__(self, config_file: str = "config.json"):
+    def __init__(self, config_file: str = constants.CONFIG_FILE):
         self.config_file = config_file
         self.config = {}
         self.default_config = {
@@ -23,8 +24,8 @@ class ConfigManager:
                 "default_font_size": "11",
                 "default_document_size": "Letter",
                 "max_file_size_mb": 10,
-                "output_directory": "output",
-                "temp_directory": "temp"
+                "output_directory": constants.OUTPUT_DIR,
+                "temp_directory": constants.TEMP_DIR
             },
             "api_settings": {
                 "max_request_size": "10MB",
@@ -38,8 +39,8 @@ class ConfigManager:
                 "file": "app.log"
             },
             "fonts": {
-                "opensans_regular": "static/fonts/OpenSans-Regular.ttf",
-                "opensans_bold": "static/fonts/OpenSans-Bold.ttf"
+                "opensans_regular": constants.OPENSANS_REGULAR_FONT,
+                "opensans_bold": constants.OPENSANS_BOLD_FONT
             },
             "validation": {
                 "max_work_experiences": 10,

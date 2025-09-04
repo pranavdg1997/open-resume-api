@@ -10,6 +10,7 @@ import logging
 
 from models.resume_models import ResumeData, PersonalInfo, WorkExperience, Education, Project, Skill
 from services.config_manager import ConfigManager
+import constants
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +126,7 @@ class ResumeValidator:
         
         # Summary length validation
         if personal_info.summary:
-            max_summary_length = 500  # Based on model definition
+            max_summary_length = constants.MAX_SUMMARY_LENGTH
             if len(personal_info.summary) > max_summary_length:
                 issues.append(f"Summary exceeds maximum length of {max_summary_length} characters")
             
@@ -174,12 +175,7 @@ class ResumeValidator:
                         warnings.append(f"{prefix} Description {j+1} is very short")
             
             # Date format validation
-            common_date_patterns = [
-                r'\w+ \d{4} - \w+ \d{4}',  # Jan 2020 - Dec 2021
-                r'\w+ \d{4} - Present',     # Jan 2020 - Present
-                r'\d{4} - \d{4}',          # 2020 - 2021
-                r'\d{4} - Present'          # 2020 - Present
-            ]
+            common_date_patterns = constants.DATE_PATTERNS
             
             if not any(re.match(pattern, exp.date) for pattern in common_date_patterns):
                 warnings.append(f"{prefix} Date format may not be standard (consider 'MMM YYYY - MMM YYYY' format)")
@@ -218,8 +214,8 @@ class ResumeValidator:
             if edu.gpa:
                 try:
                     gpa_value = float(edu.gpa.split('/')[0])
-                    if gpa_value > 4.0:
-                        warnings.append(f"{prefix} GPA seems high (>{4.0}) - verify format")
+                    if gpa_value > constants.MAX_GPA_VALUE:
+                        warnings.append(f"{prefix} GPA seems high (>{constants.MAX_GPA_VALUE}) - verify format")
                 except (ValueError, IndexError):
                     warnings.append(f"{prefix} GPA format not recognized - consider using 'X.X/4.0' format")
         
@@ -302,7 +298,7 @@ class ResumeValidator:
         
         # Color validation
         if settings.themeColor:
-            color_pattern = re.compile(r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$')
+            color_pattern = re.compile(constants.COLOR_PATTERN)
             if not color_pattern.match(settings.themeColor):
                 issues.append("Theme color must be a valid hex color (e.g., #1f2937)")
         
@@ -310,15 +306,14 @@ class ResumeValidator:
         if settings.fontSize:
             try:
                 font_size = int(settings.fontSize)
-                if font_size < 8 or font_size > 16:
-                    warnings.append("Font size should be between 8 and 16 for best results")
+                if font_size < constants.MIN_FONT_SIZE or font_size > constants.MAX_FONT_SIZE:
+                    warnings.append(f"Font size should be between {constants.MIN_FONT_SIZE} and {constants.MAX_FONT_SIZE} for best results")
             except ValueError:
                 issues.append("Font size must be a valid number")
         
         # Document size validation
-        valid_sizes = ["Letter", "A4"]
-        if settings.documentSize and settings.documentSize not in valid_sizes:
-            issues.append(f"Document size must be one of: {', '.join(valid_sizes)}")
+        if settings.documentSize and settings.documentSize not in constants.VALID_DOCUMENT_SIZES:
+            issues.append(f"Document size must be one of: {', '.join(constants.VALID_DOCUMENT_SIZES)}")
         
         return ValidationResult(
             is_valid=len(issues) == 0,

@@ -18,34 +18,35 @@ from services.pdf_generator import PDFGenerator
 from services.config_manager import ConfigManager
 from api.endpoints import router
 from utils.validators import validate_resume_data
+import constants
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format=constants.LOG_FORMAT
 )
 logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="OpenResume API",
-    description="A FastAPI wrapper for OpenResume's resume builder functionality",
-    version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc"
+    title=constants.APP_TITLE,
+    description=constants.APP_DESCRIPTION,
+    version=constants.APP_VERSION,
+    docs_url=constants.DOCS_URL,
+    redoc_url=constants.REDOC_URL
 )
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=constants.CORS_ALLOW_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=constants.CORS_ALLOW_METHODS,
+    allow_headers=constants.CORS_ALLOW_HEADERS,
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=constants.STATIC_DIR), name="static")
 
 # Initialize services
 config_manager = ConfigManager()
@@ -54,43 +55,43 @@ pdf_generator = PDFGenerator(config_manager)
 @app.on_event("startup")
 async def startup_event():
     """Initialize application on startup"""
-    logger.info("Starting OpenResume API...")
+    logger.info(f"Starting {constants.APP_TITLE}...")
     try:
         config_manager.load_config()
-        logger.info("Configuration loaded successfully")
+        logger.info(constants.CONFIG_LOADED_SUCCESS)
     except Exception as e:
-        logger.error(f"Failed to load configuration: {e}")
+        logger.error(f"{constants.CONFIG_LOAD_ERROR}: {e}")
         raise
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Cleanup on shutdown"""
-    logger.info("Shutting down OpenResume API...")
+    logger.info(f"Shutting down {constants.APP_TITLE}...")
 
 # Include API routes
-app.include_router(router, prefix="/api/v1")
+app.include_router(router, prefix=constants.API_PREFIX)
 
 @app.get("/", response_class=HTMLResponse)
 async def frontend():
     """Serve the frontend interface"""
     try:
-        with open("static/index.html", "r") as f:
+        with open(constants.INDEX_HTML, "r") as f:
             return HTMLResponse(content=f.read())
     except FileNotFoundError:
-        return HTMLResponse("<h1>Frontend not found</h1><p>Please check static/index.html</p>")
+        return HTMLResponse(f"<h1>Frontend not found</h1><p>Please check {constants.INDEX_HTML}</p>")
 
 @app.get("/api")
 async def root():
     """API information endpoint"""
     return {
-        "message": "OpenResume API",
-        "version": "1.0.0",
-        "description": "FastAPI wrapper for OpenResume resume builder",
-        "docs_url": "/docs",
+        "message": constants.APP_TITLE,
+        "version": constants.APP_VERSION,
+        "description": constants.APP_DESCRIPTION,
+        "docs_url": constants.DOCS_URL,
         "endpoints": {
-            "generate_resume": "/api/v1/generate-resume",
-            "health": "/api/v1/health",
-            "config": "/api/v1/config"
+            "generate_resume": f"{constants.API_PREFIX}{constants.GENERATE_RESUME_ENDPOINT}",
+            "health": f"{constants.API_PREFIX}{constants.HEALTH_ENDPOINT}",
+            "config": f"{constants.API_PREFIX}{constants.CONFIG_ENDPOINT}"
         }
     }
 
@@ -98,21 +99,21 @@ async def root():
 async def get_sample_data():
     """Serve comprehensive sample resume data for frontend"""
     try:
-        return FileResponse("tests/comprehensive_sample_resume.json")
+        return FileResponse(constants.COMPREHENSIVE_SAMPLE_FILE)
     except FileNotFoundError:
         # Fallback to original if comprehensive doesn't exist
         try:
-            return FileResponse("tests/validated_resume.json")
+            return FileResponse(constants.VALIDATED_SAMPLE_FILE)
         except FileNotFoundError:
-            raise HTTPException(status_code=404, detail="Sample data not found")
+            raise HTTPException(status_code=constants.HTTP_404_NOT_FOUND, detail=constants.SAMPLE_DATA_NOT_FOUND)
 
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
     return {
-        "status": "healthy",
-        "service": "OpenResume API",
-        "version": "1.0.0"
+        "status": constants.SERVICE_HEALTHY,
+        "service": constants.APP_TITLE,
+        "version": constants.APP_VERSION
     }
 
 @app.exception_handler(HTTPException)
@@ -133,17 +134,17 @@ async def general_exception_handler(request, exc):
     """General exception handler"""
     logger.error(f"Unexpected error: {str(exc)}")
     return JSONResponse(
-        status_code=500,
+        status_code=constants.HTTP_500_INTERNAL_SERVER_ERROR,
         content={
             "error": "Internal server error",
             "message": str(exc),
-            "status_code": 500
+            "status_code": constants.HTTP_500_INTERNAL_SERVER_ERROR
         }
     )
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", "5000"))
-    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", str(constants.DEFAULT_PORT)))
+    host = os.getenv("HOST", constants.DEFAULT_HOST)
     
     logger.info(f"Starting server on {host}:{port}")
     uvicorn.run(

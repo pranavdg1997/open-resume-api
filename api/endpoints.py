@@ -16,6 +16,7 @@ from services.pdf_generator import PDFGenerator
 from services.openresume_wrapper import OpenResumeWrapper
 from services.config_manager import ConfigManager
 from utils.validators import validate_resume_data, ResumeValidator
+import constants
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +88,7 @@ async def generate_resume(
     except Exception as e:
         logger.error(f"Error generating resume: {str(e)}")
         raise HTTPException(
-            status_code=500,
+            status_code=constants.HTTP_500_INTERNAL_SERVER_ERROR,
             detail={
                 "error": "Resume generation failed",
                 "message": str(e)
@@ -119,7 +120,7 @@ async def validate_resume(resume_data: ResumeData):
     except Exception as e:
         logger.error(f"Error validating resume: {str(e)}")
         raise HTTPException(
-            status_code=500,
+            status_code=constants.HTTP_500_INTERNAL_SERVER_ERROR,
             detail={
                 "error": "Validation failed",
                 "message": str(e)
@@ -145,7 +146,7 @@ async def get_config():
             },
             "validation": config.get("validation", {}),
             "api_info": {
-                "version": "1.0.0",
+                "version": constants.APP_VERSION,
                 "supported_formats": ["PDF"],
                 "max_sections": {
                     "work_experiences": config.get("validation", {}).get("max_work_experiences", 10),
@@ -161,7 +162,7 @@ async def get_config():
     except Exception as e:
         logger.error(f"Error getting config: {str(e)}")
         raise HTTPException(
-            status_code=500,
+            status_code=constants.HTTP_500_INTERNAL_SERVER_ERROR,
             detail={
                 "error": "Failed to retrieve configuration",
                 "message": str(e)
@@ -178,17 +179,7 @@ async def update_config(updates: Dict[str, Any]):
     try:
         # Filter allowed updates (security measure)
         allowed_updates = {}
-        allowed_keys = [
-            "pdf_settings.default_theme_color",
-            "pdf_settings.default_font_family", 
-            "pdf_settings.default_font_size",
-            "pdf_settings.default_document_size",
-            "validation.max_work_experiences",
-            "validation.max_educations",
-            "validation.max_projects",
-            "validation.max_skills_categories",
-            "validation.max_description_length"
-        ]
+        allowed_keys = constants.ALLOWED_CONFIG_KEYS
         
         for key, value in updates.items():
             if key in allowed_keys:
@@ -251,7 +242,7 @@ async def health_check():
         
         # Check if required directories exist
         output_dir = config_manager.get('pdf_settings.output_directory', 'output')
-        temp_dir = config_manager.get('pdf_settings.temp_directory', 'temp')
+        temp_dir = config_manager.get('pdf_settings.temp_directory', constants.TEMP_DIR)
         
         checks["directories"] = {
             "output": "exists" if os.path.exists(output_dir) else "missing",
@@ -322,7 +313,7 @@ async def get_resume_templates():
     except Exception as e:
         logger.error(f"Error getting templates: {str(e)}")
         raise HTTPException(
-            status_code=500,
+            status_code=constants.HTTP_500_INTERNAL_SERVER_ERROR,
             detail={
                 "error": "Failed to retrieve templates",
                 "message": str(e)
@@ -332,7 +323,7 @@ async def get_resume_templates():
 async def cleanup_temp_files():
     """Background task to clean up temporary files"""
     try:
-        temp_dir = config_manager.get('pdf_settings.temp_directory', 'temp')
+        temp_dir = config_manager.get('pdf_settings.temp_directory', constants.TEMP_DIR)
         if os.path.exists(temp_dir):
             # Clean up files older than 1 hour
             import time

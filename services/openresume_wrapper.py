@@ -11,6 +11,7 @@ import tempfile
 import logging
 from typing import Dict, Any, List
 from models.resume_models import ResumeData
+import constants
 
 logger = logging.getLogger(__name__)
 
@@ -19,8 +20,8 @@ class OpenResumeWrapper:
     
     def __init__(self, config_manager):
         self.config_manager = config_manager
-        self.openresume_path = "openresume-source"
-        self.bridge_script = "openresume_pdf_generator.js"
+        self.openresume_path = constants.OPENRESUME_SOURCE_DIR
+        self.bridge_script = constants.OPENRESUME_BRIDGE_SCRIPT
         
         # Verify OpenResume installation
         self._verify_installation()
