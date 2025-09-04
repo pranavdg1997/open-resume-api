@@ -2,6 +2,16 @@
 
 A FastAPI-based backend service that wraps the actual OpenResume codebase to generate professional PDF resumes from JSON data through a REST API.
 
+## Attribution
+
+This project is built on top of the excellent **[OpenResume](https://github.com/xitanggg/open-resume)** open-source project by Xitang Zhao. OpenResume is a powerful, open-source resume builder and parser built with Next.js and React. We've created this API wrapper to provide backend access to OpenResume's professional PDF generation capabilities.
+
+**Original Project**: [Open Resume - Free Resume Builder](https://github.com/xitanggg/open-resume)  
+**Original Author**: [Xitang Zhao](https://github.com/xitanggg)  
+**License**: AGPL-3.0 License
+
+All PDF generation, resume templates, and core functionality are powered by the original OpenResume codebase. This wrapper provides a REST API interface to make OpenResume's capabilities accessible as a backend service.
+
 ## Features
 
 ✅ **Authentic OpenResume Integration**: Uses actual OpenResume React PDF generation logic  
