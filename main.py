@@ -98,11 +98,11 @@ async def root():
 async def get_sample_data():
     """Serve comprehensive sample resume data for frontend"""
     try:
-        return FileResponse("comprehensive_sample_resume.json")
+        return FileResponse("tests/comprehensive_sample_resume.json")
     except FileNotFoundError:
         # Fallback to original if comprehensive doesn't exist
         try:
-            return FileResponse("validated_resume.json")
+            return FileResponse("tests/validated_resume.json")
         except FileNotFoundError:
             raise HTTPException(status_code=404, detail="Sample data not found")
 
