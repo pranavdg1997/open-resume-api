@@ -1,51 +1,62 @@
-# Python
+# ============================================================================
+# FILES NOT NEEDED FOR DOCKER CONTAINER DEPLOYMENT
+# ============================================================================
+
+# Python cache and compiled files
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
+*.so
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# Virtual environments (not needed in container)
+venv/
+.venv/
+.pythonlibs/
 env/
 pip-log.txt
 pip-delete-this-directory.txt
 .tox
+
+# Testing and coverage (not needed for production)
 .coverage
 .coverage.*
 nosetests.xml
 coverage.xml
 *.cover
-*.log
-.mypy_cache
-.pytest_cache
-.hypothesis
+htmlcov/
 
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# Development and testing files (not needed in container)
+tests/
+attached_assets/
+*_test.py
+test_*.py
 
-# Virtual environments
-venv/
-.venv/
-.pythonlibs/
-
-# Generated files
+# Generated output files (created at runtime)
 output/
 temp/
 *.pdf
+logs/
+*.log
+
+# Development documentation (not needed in container)
+SETUP.md
+COMPREHENSIVE_RESUME_SUCCESS.md
+DEPENDENCIES.md  
+ESSENTIAL_FILES.md
+PERFECT_MATCH_RESULTS.md
+
+# Generated development artifacts (not needed in container)
 generated-icon.png
+generated_from_excel.pdf
+git_ready_test.pdf
+perfect_match_resume.json
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Replit specific files (not needed for local users)
+# Replit-specific files (platform-specific, not needed in container)
 .replit
 .upm/
 .cache/
@@ -54,37 +65,43 @@ replit.md
 uv.lock
 pyproject.toml
 
-# Development documentation files
-COMPREHENSIVE_RESUME_SUCCESS.md
-DEPENDENCIES.md  
-ESSENTIAL_FILES.md
-PERFECT_MATCH_RESULTS.md
+# IDE and editor files (not needed in container)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
 
-# Generated development files
-generated-icon.png
-generated_from_excel.pdf
-git_ready_test.pdf
-perfect_match_resume.json
+# OS generated files (not needed in container)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Thumbs.db:encryptable
 
-# Node modules and dependencies
+# Node.js (will be installed in container)
 node_modules/
 package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# OpenResume source (development only)
+# OpenResume source code (large, not needed - we only need bridge scripts)
 openresume-source/
+
+# Legacy/unused bridge files (keeping only openresume_pdf_generator.js)
 openresume_bridge.js
 real_openresume_integration.js
 
-# Test and development files
-tests/
-attached_assets/
-COMPREHENSIVE_RESUME_SUCCESS.md
-DEPENDENCIES.md  
-ESSENTIAL_FILES.md
-PERFECT_MATCH_RESULTS.md
-
-# Configuration files that may contain sensitive data
+# Configuration files with sensitive data (use config.example.json template)
 config.json
 
-# Docker generated files
+# Docker build context optimization
 .dockerignore
+.git/
+.gitignore
