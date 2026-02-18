@@ -1,6 +1,9 @@
-# ============================================================================
+# Added rule to ignore all dotfiles and dotfolders
+.*
+
+# ===========================================================================
 # FILES NOT NEEDED FOR DOCKER CONTAINER DEPLOYMENT
-# ============================================================================
+# ===========================================================================
 
 # Python cache and compiled files
 __pycache__/
@@ -46,7 +49,7 @@ logs/
 # Development documentation (not needed in container)
 SETUP.md
 COMPREHENSIVE_RESUME_SUCCESS.md
-DEPENDENCIES.md  
+DEPENDENCIES.md
 ESSENTIAL_FILES.md
 PERFECT_MATCH_RESULTS.md
 
