@@ -124,7 +124,7 @@ const generateOpenResumePDF = async (resumeData) => {
       fontSize: nameFontSize,
       fontWeight: 'bold',
       color: '#1f2937',
-      marginBottom: 6,
+      marginBottom: 8,
       letterSpacing: 0,
       textAlign: 'center'
     },
@@ -339,7 +339,7 @@ const generateOpenResumePDF = async (resumeData) => {
         // Publications Section
         openResumeData.publications && openResumeData.publications.length > 0 &&
           React.createElement(View, { style: styles.section },
-            React.createElement(Text, { style: styles.sectionTitle }, 'PUBLICATIONS'),
+            React.createElement(Text, { style: styles.sectionTitle }, 'PUBLICATIONS AND ACHIEVEMENTS'),
             ...openResumeData.publications.map((pub, index) =>
               React.createElement(View, { key: index, style: styles.publicationItem },
                 pub.url ?
