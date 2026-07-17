@@ -196,6 +196,22 @@ const generateOpenResumePDF = async (resumeData) => {
       fontSize: smallFontSize,
       lineHeight: 1.18,
       marginBottom: 2
+    },
+    publicationItem: {
+      marginBottom: 6
+    },
+    publicationTitle: {
+      fontSize: bodyFontSize,
+      fontWeight: 'bold',
+      color: '#1f2937',
+      lineHeight: 1.18,
+      marginBottom: 1
+    },
+    publicationMeta: {
+      fontSize: smallFontSize,
+      color: '#6b7280',
+      lineHeight: 1.15,
+      marginBottom: 2
     }
   });
 
@@ -325,11 +341,14 @@ const generateOpenResumePDF = async (resumeData) => {
           React.createElement(View, { style: styles.section },
             React.createElement(Text, { style: styles.sectionTitle }, 'PUBLICATIONS'),
             ...openResumeData.publications.map((pub, index) =>
-              React.createElement(View, { key: index, style: styles.experienceItem },
-                React.createElement(View, { style: styles.experienceHeader },
-                  React.createElement(Text, { style: styles.jobTitle }, pub.name),
-                  React.createElement(Text, { style: styles.date }, pub.date)
-                ),
+              React.createElement(View, { key: index, style: styles.publicationItem },
+                pub.url ?
+                  React.createElement(Link, {
+                    style: { ...styles.publicationTitle, color: '#2563eb', textDecoration: 'underline' },
+                    src: pub.url
+                  }, pub.name) :
+                  React.createElement(Text, { style: styles.publicationTitle }, pub.name),
+                pub.date && React.createElement(Text, { style: styles.publicationMeta }, pub.date),
                 ...pub.descriptions.map((desc, descIndex) =>
                   React.createElement(Text, { key: descIndex, style: styles.bullet }, `• ${desc}`)
                 )
