@@ -55,6 +55,7 @@ const generateOpenResumePDF = async (resumeData) => {
     publications: (resumeData.publications || []).map(pub => ({
       name: pub.name || '',
       date: pub.date || '',
+      url: pub.url || '',
       descriptions: pub.descriptions || []
     })),
     certifications: (resumeData.certifications || []).map(cert => ({

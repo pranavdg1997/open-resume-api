@@ -67,6 +67,7 @@ class Publication(BaseModel):
     """Publication entry"""
     name: str = Field(..., min_length=1, max_length=200, description="Publication title")
     date: str = Field(..., description="Publication date") 
+    url: Optional[str] = Field(None, description="Publication URL")
     descriptions: List[str] = Field(default_factory=list, description="Publication details")
     
     @validator('descriptions')
