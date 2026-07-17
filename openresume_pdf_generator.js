@@ -96,97 +96,106 @@ const generateOpenResumePDF = async (resumeData) => {
 
   // Components already imported above
 
+  const requestedFontSize = Number(settings.fontSize) || 11;
+  const bodyFontSize = Math.max(8, requestedFontSize - 2);
+  const smallFontSize = Math.max(7.5, bodyFontSize - 0.5);
+  const nameFontSize = Math.max(18, requestedFontSize + 9);
+  const sectionFontSize = bodyFontSize + 2;
+
   const styles = StyleSheet.create({
     page: {
       fontFamily: 'Helvetica',
-      fontSize: 11,
-      paddingTop: 50,
-      paddingBottom: 50,
-      paddingLeft: 60,
-      paddingRight: 60,
+      fontSize: bodyFontSize,
+      paddingTop: 36,
+      paddingBottom: 36,
+      paddingLeft: 42,
+      paddingRight: 42,
       backgroundColor: '#ffffff',
-      lineHeight: 1.6
+      lineHeight: 1.2
     },
     header: {
-      borderBottomWidth: 2,
+      borderBottomWidth: 1,
       borderBottomColor: '#1f2937',
-      paddingBottom: 20,
-      marginBottom: 25,
+      paddingBottom: 8,
+      marginBottom: 10,
       alignItems: 'center'
     },
     name: {
-      fontSize: 24,
+      fontSize: nameFontSize,
       fontWeight: 'bold',
       color: '#1f2937',
-      marginBottom: 15,
-      letterSpacing: 1,
+      marginBottom: 6,
+      letterSpacing: 0,
       textAlign: 'center'
     },
     contact: {
-      fontSize: 11,
+      fontSize: smallFontSize,
       color: '#4b5563',
-      marginBottom: 4,
+      marginBottom: 2,
       textAlign: 'center'
     },
     contactLine: {
       flexDirection: 'row',
       justifyContent: 'center',
       flexWrap: 'wrap',
-      marginBottom: 12,
+      marginBottom: 5,
       alignItems: 'center'
     },
     summary: {
-      fontSize: 11,
-      lineHeight: 1.5,
+      fontSize: bodyFontSize,
+      lineHeight: 1.2,
       textAlign: 'justify',
       color: '#374151'
     },
     section: {
-      marginBottom: 25
+      marginBottom: 10
     },
     sectionTitle: {
-      fontSize: 13,
+      fontSize: sectionFontSize,
       fontWeight: 'bold',
       color: '#1f2937',
-      marginBottom: 15,
-      letterSpacing: 1.5,
+      marginBottom: 6,
+      letterSpacing: 0,
       borderBottomWidth: 1,
       borderBottomColor: '#e5e7eb',
-      paddingBottom: 5
+      paddingBottom: 2
     },
     experienceItem: {
-      marginBottom: 18
+      marginBottom: 8
+    },
+    educationItem: {
+      marginBottom: 4
     },
     experienceHeader: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginBottom: 5
+      marginBottom: 2
     },
     jobTitle: {
-      fontSize: 11,
+      fontSize: bodyFontSize,
       fontWeight: 'bold',
       color: '#1f2937'
     },
     company: {
-      fontSize: 11,
+      fontSize: bodyFontSize,
       fontWeight: 'bold',
       color: '#1f2937'
     },
     date: {
-      fontSize: 10,
+      fontSize: smallFontSize,
       color: '#6b7280'
     },
     bullet: {
-      fontSize: 10,
-      lineHeight: 1.5,
-      marginBottom: 4,
-      marginLeft: 20,
+      fontSize: smallFontSize,
+      lineHeight: 1.18,
+      marginBottom: 2,
+      marginLeft: 12,
       color: '#374151'
     },
     skillsText: {
-      fontSize: 10,
-      lineHeight: 1.4,
-      marginBottom: 5
+      fontSize: smallFontSize,
+      lineHeight: 1.18,
+      marginBottom: 2
     }
   });
 
@@ -225,7 +234,7 @@ const generateOpenResumePDF = async (resumeData) => {
           ),
           
           openResumeData.profile.summary && 
-            React.createElement(Text, { style: { ...styles.summary, marginTop: 15 } }, openResumeData.profile.summary)
+            React.createElement(Text, { style: { ...styles.summary, marginTop: 5 } }, openResumeData.profile.summary)
         ),
 
         // Education Section
@@ -233,7 +242,7 @@ const generateOpenResumePDF = async (resumeData) => {
           React.createElement(View, { style: styles.section },
             React.createElement(Text, { style: styles.sectionTitle }, 'EDUCATION'),
             ...openResumeData.educations.map((edu, index) =>
-              React.createElement(View, { key: index, style: styles.experienceItem },
+              React.createElement(View, { key: index, style: styles.educationItem },
                 React.createElement(View, { style: styles.experienceHeader },
                   React.createElement(Text, { style: styles.company }, 
                     `${edu.school} - ${edu.degree}`),
