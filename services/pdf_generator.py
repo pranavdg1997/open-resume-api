@@ -19,7 +19,7 @@ from datetime import datetime
 from io import BytesIO
 from typing import List, Dict, Any
 
-from models.resume_models import ResumeData, PersonalInfo, WorkExperience, Education, Project, Skill
+from models.resume_models import ResumeData, PersonalInfo, WorkExperience, Education, Project, Skill, Certification
 from services.config_manager import ConfigManager
 
 logger = logging.getLogger(__name__)
@@ -91,6 +91,12 @@ class PDFGenerator:
                     resume_data.settings
                 ))
             
+            if resume_data.certifications:
+                story.extend(self._build_certifications_section(
+                    resume_data.certifications,
+                    resume_data.settings
+                ))
+
             if (resume_data.settings.formToShow or {}).get("custom", True) and resume_data.custom.descriptions:
                 story.extend(self._build_custom_section(
                     resume_data.custom.descriptions,
@@ -212,7 +218,7 @@ class PDFGenerator:
         # Contact information
         contact_parts = []
         if personal_info.email:
-            contact_parts.append(personal_info.email)
+            contact_parts.append(f'<link href="mailto:{personal_info.email}">{personal_info.email}</link>')
         if personal_info.phone:
             contact_parts.append(personal_info.phone)
         if personal_info.url:
@@ -244,22 +250,24 @@ class PDFGenerator:
             # Company and job title table
             exp_table = Table([
                 [exp.jobTitle, exp.date],
-                [exp.company, ""]
-            ], colWidths=[4*inch, 2*inch])
-            
+                [exp.company, exp.location or ""]
+            ], colWidths=[5.25*inch, 2.25*inch])
+
             exp_table.setStyle(TableStyle([
                 ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
                 ('FONTNAME', (1, 0), (1, 0), 'Helvetica'),
                 ('FONTNAME', (0, 1), (0, 1), 'Helvetica'),
                 ('FONTSIZE', (0, 0), (-1, -1), int(settings.fontSize) if settings.fontSize.isdigit() else 11),
-                ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
+                ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),
                 ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
                 ('TOPPADDING', (0, 0), (-1, -1), 2),
+                ('LEFTPADDING', (0, 0), (-1, -1), 0),
+                ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
             ]))
-            
+
             story.append(exp_table)
-            
+
             # Job descriptions
             for desc in exp.descriptions:
                 bullet_para = Paragraph(f"• {desc}", styles['BodyText'])
@@ -285,8 +293,8 @@ class PDFGenerator:
             edu_table = Table([
                 [degree_text, edu.date],
                 [edu.school, ""]
-            ], colWidths=[4*inch, 2*inch])
-            
+            ], colWidths=[5.25*inch, 2.25*inch])
+
             edu_table.setStyle(TableStyle([
                 ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
                 ('FONTNAME', (1, 0), (1, 0), 'Helvetica'),
@@ -296,6 +304,8 @@ class PDFGenerator:
                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),
                 ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
                 ('TOPPADDING', (0, 0), (-1, -1), 2),
+                ('LEFTPADDING', (0, 0), (-1, -1), 0),
+                ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
             ]))
             
             story.append(edu_table)
@@ -321,8 +331,8 @@ class PDFGenerator:
             # Project table
             proj_table = Table([
                 [project.name, project.date]
-            ], colWidths=[4*inch, 2*inch])
-            
+            ], colWidths=[5.25*inch, 2.25*inch])
+
             proj_table.setStyle(TableStyle([
                 ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
                 ('FONTNAME', (1, 0), (1, 0), 'Helvetica'),
@@ -331,6 +341,8 @@ class PDFGenerator:
                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),
                 ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
                 ('TOPPADDING', (0, 0), (-1, -1), 2),
+                ('LEFTPADDING', (0, 0), (-1, -1), 0),
+                ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
             ]))
             
             story.append(proj_table)
@@ -359,6 +371,29 @@ class PDFGenerator:
         story.append(Spacer(1, 6))
         return story
     
+    def _build_certifications_section(self, certifications: List[Certification], settings):
+        """Build certifications section"""
+        styles = self._get_styles(settings)
+        story = []
+
+        story.append(Paragraph("CERTIFICATIONS", styles['SectionHeading']))
+
+        for cert in certifications:
+            if cert.url:
+                name_part = f'<b><link href="{cert.url}">{cert.name}</link></b>'
+            else:
+                name_part = f"<b>{cert.name}</b>"
+            parts = [name_part]
+            if cert.org:
+                parts.append(cert.org)
+            if cert.date:
+                parts.append(cert.date)
+            cert_text = " — ".join(parts)
+            story.append(Paragraph(cert_text, styles['BodyText']))
+
+        story.append(Spacer(1, 6))
+        return story
+
     def _build_custom_section(self, descriptions: List[str], settings):
         """Build custom section"""
         styles = self._get_styles(settings)

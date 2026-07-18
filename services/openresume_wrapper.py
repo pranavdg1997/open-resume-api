@@ -103,6 +103,7 @@ class OpenResumeWrapper:
                 publications.append({
                     "name": pub.name,
                     "date": pub.date,
+                    "url": getattr(pub, "url", None) or "",
                     "descriptions": pub.descriptions
                 })
         

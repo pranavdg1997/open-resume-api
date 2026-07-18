@@ -1,12 +1,22 @@
 """
-Resume data models based on OpenResume's structure
+Pydantic models defining the JSON schema for a resume.
+
+These classes mirror the structure expected by the API for
+`POST /api/v1/generate-resume`.
+
+The original models live in `models/resume_models.py`, but a
+separate file can be useful for documentation or tooling that
+imports only the input structure.
 """
 
-from pydantic import BaseModel, Field, validator, EmailStr
-from typing import List, Optional, Dict, Any
-from datetime import date
-from enum import Enum
+from __future__ import annotations
 
+from pydantic import BaseModel, Field, EmailStr
+from typing import List, Optional, Dict
+
+# ---------------------------------------------------------------------------
+# 1. Personal information
+# ---------------------------------------------------------------------------
 class PersonalInfo(BaseModel):
     """Personal information section"""
     name: str = Field(..., min_length=1, max_length=100, description="Full name")
@@ -15,15 +25,12 @@ class PersonalInfo(BaseModel):
     url: Optional[str] = Field(None, description="Personal website or portfolio URL")
     github: Optional[str] = Field(None, description="GitHub profile URL")
     linkedin: Optional[str] = Field(None, description="LinkedIn profile URL")
-    summary: Optional[str] = Field(None, max_length=2000, description="Professional summary")
+    summary: Optional[str] = Field(None, max_length=500, description="Professional summary")
     location: Optional[str] = Field(None, max_length=100, description="Location (city, state)")
 
-    @validator('phone')
-    def validate_phone(cls, v):
-        if v and not v.replace('-', '').replace('(', '').replace(')', '').replace(' ', '').replace('+', '').isdigit():
-            raise ValueError('Invalid phone number format')
-        return v
-
+# ---------------------------------------------------------------------------
+# 2. Work experience
+# ---------------------------------------------------------------------------
 class WorkExperience(BaseModel):
     """Work experience entry"""
     company: str = Field(..., min_length=1, max_length=100, description="Company name")
@@ -32,10 +39,9 @@ class WorkExperience(BaseModel):
     location: Optional[str] = Field(None, max_length=100, description="Job location (e.g., 'San Jose, CA')")
     descriptions: List[str] = Field(default_factory=list, description="Job responsibilities and achievements")
 
-    @validator('descriptions')
-    def validate_descriptions(cls, v):
-        return [desc.strip() for desc in v if desc.strip()]
-
+# ---------------------------------------------------------------------------
+# 3. Education
+# ---------------------------------------------------------------------------
 class Education(BaseModel):
     """Education entry"""
     school: str = Field(..., min_length=1, max_length=100, description="School name")
@@ -44,37 +50,36 @@ class Education(BaseModel):
     gpa: Optional[str] = Field(None, description="GPA (optional)")
     descriptions: List[str] = Field(default_factory=list, description="Additional details")
 
+# ---------------------------------------------------------------------------
+# 4. Project
+# ---------------------------------------------------------------------------
 class Project(BaseModel):
     """Project entry with structured format similar to work experience"""
     name: str = Field(..., min_length=1, max_length=100, description="Project name")
     company: Optional[str] = Field(None, max_length=100, description="Company or organization (optional)")
     date: str = Field(..., description="Project date or date range")
     descriptions: List[str] = Field(default_factory=list, description="Project details and achievements")
-    
-    @validator('descriptions')
-    def validate_descriptions(cls, v):
-        return [desc.strip() for desc in v if desc.strip()]
 
+# ---------------------------------------------------------------------------
+# 5. Skill category
+# ---------------------------------------------------------------------------
 class Skill(BaseModel):
     """Skill category"""
     category: str = Field(..., min_length=1, max_length=50, description="Skill category name")
     skills: List[str] = Field(..., description="List of skills in this category")
 
-    @validator('skills')
-    def validate_skills(cls, v):
-        return [skill.strip() for skill in v if skill.strip()]
-
+# ---------------------------------------------------------------------------
+# 6. Publication
+# ---------------------------------------------------------------------------
 class Publication(BaseModel):
     """Publication entry"""
     name: str = Field(..., min_length=1, max_length=200, description="Publication title")
-    date: str = Field(..., description="Publication date") 
-    url: Optional[str] = Field(None, description="Publication URL")
+    date: str = Field(..., description="Publication date")
     descriptions: List[str] = Field(default_factory=list, description="Publication details")
-    
-    @validator('descriptions')
-    def validate_descriptions(cls, v):
-        return [desc.strip() for desc in v if desc.strip()]
 
+# ---------------------------------------------------------------------------
+# 7. Certification
+# ---------------------------------------------------------------------------
 class Certification(BaseModel):
     """Certification entry"""
     name: str = Field(..., min_length=1, max_length=100, description="Certification name")
@@ -83,14 +88,16 @@ class Certification(BaseModel):
     org: Optional[str] = Field(None, max_length=100, description="Awarding organization")
     descriptions: List[str] = Field(default_factory=list, description="Certification details")
 
-    @validator('descriptions')
-    def validate_descriptions(cls, v):
-        return [desc.strip() for desc in v if desc.strip()]
-
+# ---------------------------------------------------------------------------
+# 8. Custom section
+# ---------------------------------------------------------------------------
 class Custom(BaseModel):
     """Custom section"""
     descriptions: List[str] = Field(default_factory=list, description="Custom section content")
 
+# ---------------------------------------------------------------------------
+# 9. Resume settings
+# ---------------------------------------------------------------------------
 class ResumeSettings(BaseModel):
     """Resume styling and formatting settings"""
     themeColor: Optional[str] = Field("#1f2937", description="Theme color (hex)")
@@ -100,12 +107,12 @@ class ResumeSettings(BaseModel):
     formToHeading: Optional[Dict[str, str]] = Field(
         default_factory=lambda: {
             "workExperiences": "WORK EXPERIENCE",
-            "educations": "EDUCATION", 
+            "educations": "EDUCATION",
             "projects": "PROJECTS",
             "skills": "SKILLS",
-            "custom": "ADDITIONAL"
+            "custom": "ADDITIONAL",
         },
-        description="Section headings mapping"
+        description="Section headings mapping",
     )
     formToShow: Optional[Dict[str, bool]] = Field(
         default_factory=lambda: {
@@ -113,11 +120,14 @@ class ResumeSettings(BaseModel):
             "educations": True,
             "projects": True,
             "skills": True,
-            "custom": True
+            "custom": True,
         },
-        description="Section visibility settings"
+        description="Section visibility settings",
     )
 
+# ---------------------------------------------------------------------------
+# 10. Full resume data structure
+# ---------------------------------------------------------------------------
 class ResumeData(BaseModel):
     """Complete resume data structure"""
     personalInfo: PersonalInfo
@@ -130,74 +140,33 @@ class ResumeData(BaseModel):
     custom: Custom = Field(default_factory=Custom)
     settings: ResumeSettings = Field(default_factory=lambda: ResumeSettings())
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "personalInfo": {
-                    "name": "John Doe",
-                    "email": "john.doe@example.com",
-                    "phone": "+1 (555) 123-4567",
-                    "url": "https://johndoe.dev",
-                    "summary": "Experienced software engineer with expertise in full-stack development",
-                    "location": "San Francisco, CA"
-                },
-                "workExperiences": [
-                    {
-                        "company": "Tech Corp",
-                        "jobTitle": "Senior Software Engineer",
-                        "date": "Jan 2020 - Present",
-                        "descriptions": [
-                            "Led development of microservices architecture",
-                            "Reduced system latency by 40%"
-                        ]
-                    }
-                ],
-                "educations": [
-                    {
-                        "school": "University of California",
-                        "degree": "Bachelor of Science in Computer Science",
-                        "date": "2016 - 2020",
-                        "gpa": "3.8/4.0",
-                        "descriptions": []
-                    }
-                ],
-                "projects": [
-                    {
-                        "name": "Resume Builder API",
-                        "date": "2023",
-                        "descriptions": [
-                            "Built REST API using FastAPI",
-                            "Integrated PDF generation capabilities"
-                        ]
-                    }
-                ],
-                "skills": [
-                    {
-                        "category": "Programming Languages",
-                        "skills": ["Python", "JavaScript", "TypeScript", "Java"]
-                    },
-                    {
-                        "category": "Technologies",
-                        "skills": ["React", "FastAPI", "Docker", "AWS"]
-                    }
-                ],
-                "custom": {
-                    "descriptions": ["Available for remote work"]
-                }
-            }
-        }
-
+# ---------------------------------------------------------------------------
+# 11. Response models (optional but useful for completeness)
+# ---------------------------------------------------------------------------
 class ResumeResponse(BaseModel):
-    """Response model for resume generation"""
     success: bool
     message: str
     filename: Optional[str] = None
     size: Optional[int] = None
     generated_at: Optional[str] = None
-    
+
 class ErrorResponse(BaseModel):
-    """Error response model"""
     error: str
     message: str
     status_code: int
-    details: Optional[Dict[str, Any]] = None
+    details: Optional[Dict] = None
+
+__all__ = [
+    "PersonalInfo",
+    "WorkExperience",
+    "Education",
+    "Project",
+    "Skill",
+    "Publication",
+    "Certification",
+    "Custom",
+    "ResumeSettings",
+    "ResumeData",
+    "ResumeResponse",
+    "ErrorResponse",
+]

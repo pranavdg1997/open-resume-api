@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@react-pdf/renderer": "^4.3.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "@react-pdf/renderer": "^4.3.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   }
 }
