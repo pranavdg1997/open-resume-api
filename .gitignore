@@ -35,9 +35,12 @@ htmlcov/
 
 # Development and testing files (not needed in container)
 tests/
+!tests/
+!tests/**
 attached_assets/
 *_test.py
 test_*.py
+!tests/test_*.py
 
 # Generated output files (created at runtime)
 output/

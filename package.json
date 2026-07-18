@@ -4,7 +4,7 @@
   "description": "A FastAPI-based backend service that wraps the actual OpenResume codebase to generate professional PDF resumes from JSON data through a REST API.",
   "main": "openresume_bridge.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/openresume_pdf_generator_style.test.js && node tests/openresume_pdf_generator_render.test.js"
   },
   "keywords": [],
   "author": "",
