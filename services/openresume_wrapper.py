@@ -61,6 +61,7 @@ class OpenResumeWrapper:
                 "company": exp.company,
                 "jobTitle": exp.jobTitle,
                 "date": exp.date,
+                "location": exp.location or "",
                 "descriptions": exp.descriptions
             })
         
